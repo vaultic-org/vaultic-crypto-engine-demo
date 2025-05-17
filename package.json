@@ -1,0 +1,19 @@
+{
+  "name": "vaultic-browser-demo",
+  "version": "0.1.0",
+  "description": "Browser demonstration of vaultic-crypto-engine",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vaultic-crypto-engine": "^0.1.3"
+  },
+  "devDependencies": {
+    "vite": "^5.4.19",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-wasm": "^3.4.1"
+  }
+}
