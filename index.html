@@ -1,819 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vaultic - RSA Encryption Demo</title>
-  <link rel="icon" type="image/x-icon" href="vaultic.ico">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary-color: #3b82f6;
-      --primary-hover: #2563eb;
-      --secondary-color: #0f172a;
-      --success-color: #10b981;
-      --error-color: #ef4444;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #1e293b;
-      --border-color: #e2e8f0;
-      --vaultic-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    }
-
-    body {
-      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: var(--text-color);
-      background-color: var(--bg-color);
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar {
-      background-color: var(--secondary-color);
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .navbar-brand {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: white;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .brand-icon {
-      background: var(--vaultic-gradient);
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 18px;
-    }
-
-    .navbar-links {
-      display: flex;
-      gap: 24px;
-    }
-
-    .navbar-link {
-      color: #cbd5e1;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .navbar-link:hover {
-      color: white;
-    }
-
-    .github-link {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 8px 12px;
-      border-radius: 4px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 30px 20px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .demo-badge {
-      display: inline-block;
-      background-color: rgba(59, 130, 246, 0.1);
-      color: var(--primary-color);
-      padding: 4px 10px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      color: var(--secondary-color);
-      margin-bottom: 10px;
-      font-weight: 800;
-      font-size: 2.2rem;
-    }
-
-    .subtitle {
-      color: #64748b;
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .powered-by {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: #64748b;
-      gap: 5px;
-    }
-
-    .powered-by a {
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-      padding: 24px;
-      margin-bottom: 24px;
-      border: 1px solid var(--border-color);
-    }
-
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 18px;
-      color: var(--secondary-color);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card-title i {
-      color: var(--primary-color);
-    }
-
-    .input-group {
-      margin-bottom: 18px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    input[type="text"],
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-family: inherit;
-      transition: border-color 0.2s;
-    }
-
-    input[type="text"]:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-      font-size: 0.85rem;
-    }
-
-    .textarea-wrapper {
-      position: relative;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 500;
-      color: var(--text-color);
-      transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-      background-color: var(--bg-color);
-    }
-
-    .button-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 6px;
-      background-color: var(--primary-color);
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    button:hover:not(:disabled) {
-      background-color: var(--primary-hover);
-      transform: translateY(-1px);
-    }
-
-    button:active:not(:disabled) {
-      transform: translateY(0);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .secondary-btn {
-      background-color: #f1f5f9;
-      color: #475569;
-    }
-
-    .secondary-btn:hover:not(:disabled) {
-      background-color: #e2e8f0;
-    }
-
-    .log-container {
-      height: 230px;
-      overflow-y: auto;
-      background-color: #0f172a;
-      border-radius: 6px;
-      padding: 16px;
-      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-      font-size: 0.85rem;
-    }
-
-    .log-entry {
-      margin-bottom: 6px;
-      color: #f1f5f9;
-    }
-
-    .success {
-      color: var(--success-color);
-    }
-
-    .error {
-      color: var(--error-color);
-    }
-
-    .info {
-      color: #93c5fd;
-    }
-
-    .output-section {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .output-section.visible {
-      display: block;
-      opacity: 1;
-    }
-
-    /* Loading spinner */
-    .loading {
-      display: none;
-      margin: 0 auto;
-      width: 24px;
-      height: 24px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-    }
-
-    .loading.active {
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vaultic.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Vaultic Crypto Engine - Advanced cryptographic library for JavaScript and TypeScript" />
+    <meta name="keywords" content="cryptography, RSA, encryption, security, JavaScript, TypeScript, WebAssembly" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://crypto.vaultic.app/" />
+    <meta property="og:title" content="Vaultic Crypto Engine" />
+    <meta property="og:description" content="Advanced cryptographic library for JavaScript and TypeScript" />
+    <meta property="og:image" content="/og-image.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://crypto.vaultic.app/" />
+    <meta property="twitter:title" content="Vaultic Crypto Engine" />
+    <meta property="twitter:description" content="Advanced cryptographic library for JavaScript and TypeScript" />
+    <meta property="twitter:image" content="/og-image.jpg" />
+    
+    <!-- Scripts and styles -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <title>Vaultic Crypto Engine</title>
+    <style>
+      /* Style to avoid flickering */
+      html, body, #root {
+        background-color: #111827; /* bg-gray-900 */
+        height: 100%;
+        margin: 0;
+        padding: 0;
       }
-    }
-
-    .process-flow {
-      display: flex;
-      justify-content: space-between;
-      margin: 40px 0;
-      position: relative;
-    }
-
-    .process-flow::before {
-      content: '';
-      position: absolute;
-      top: 30px;
-      left: 60px;
-      right: 60px;
-      height: 4px;
-      background-color: var(--border-color);
-      z-index: 0;
-    }
-
-    .step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 120px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .step-icon {
-      width: 64px;
-      height: 64px;
-      background-color: var(--card-bg);
-      border: 2px solid var(--primary-color);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: var(--primary-color);
-      margin-bottom: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    .step-text {
-      text-align: center;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--secondary-color);
-    }
-
-    .vaultic-features {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .feature-icon {
-      color: var(--primary-color);
-      font-size: 1.2rem;
-      margin-top: 2px;
-    }
-
-    .feature-text h4 {
-      margin: 0 0 5px 0;
-      font-size: 1rem;
-    }
-
-    .feature-text p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #64748b;
-    }
-
-    .footer {
-      background-color: var(--secondary-color);
-      color: #cbd5e1;
-      padding: 40px 0;
-      margin-top: 60px;
-    }
-
-    .footer-container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 30px;
-    }
-
-    .footer-col {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .footer-col h3 {
-      color: white;
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
-
-    .footer-col p {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .footer-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .footer-links li {
-      margin-bottom: 10px;
-    }
-
-    .footer-links a {
-      color: #cbd5e1;
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: white;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 30px;
-      margin-top: 30px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 0.85rem;
-    }
-
-    .encryption-methods {
-      display: flex;
-      justify-content: space-between;
-      margin: 20px 0;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .encryption-method {
-      flex: 1;
-      min-width: 250px;
-      padding: 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-    }
-
-    .encryption-method h4 {
-      margin-top: 0;
-    }
-
-    .encryption-method p {
-      margin-bottom: 0;
-    }
-
-    .method-icon {
-      color: var(--primary-color);
-      margin-right: 8px;
-    }
-
-    /* Responsive styles */
-    @media (max-width: 768px) {
-      .process-flow {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-      }
-
-      .process-flow::before {
+      
+      /* Style to avoid flickering */
+      .preloader {
+        position: fixed;
         top: 0;
-        bottom: 0;
-        left: 50%;
-        width: 4px;
-        height: auto;
-        right: auto;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #111827;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease-out;
       }
-
-      .navbar-links {
-        display: none;
+      
+      .preloader.loaded {
+        opacity: 0;
+        pointer-events: none;
       }
-
-      .button-group {
-        flex-direction: column;
+      
+      .preloader-dot {
+        width: 1rem;
+        height: 1rem;
+        margin: 0 0.5rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #60a5fa, #3b82f6, #2563eb);
+        animation: bounce 1s infinite ease-in-out;
       }
-
-      h1 {
-        font-size: 1.8rem;
+      
+      .preloader-dot:nth-child(1) {
+        animation-delay: 0s;
       }
-    }
-  </style>
-</head>
-
-<body>
-  <nav class="navbar">
-    <a href="https://github.com/vaultic-org" class="navbar-brand">
-      <div class="brand-icon"><i class="fas fa-shield-alt"></i></div>
-      Vaultic
-    </a>
-    <div class="navbar-links">
-      <a href="#" class="navbar-link">Home</a>
-      <a href="#" class="navbar-link">Documentation</a>
-      <a href="#" class="navbar-link">Products</a>
-      <a href="https://github.com/vaultic-org" class="navbar-link github-link">
-        <i class="fab fa-github"></i> GitHub
-      </a>
-    </div>
-  </nav>
-
-  <div class="container">
-    <header>
-      <div class="demo-badge">Interactive Demo</div>
-      <h1>RSA Encryption Playground</h1>
-      <p class="subtitle">
-        Experience Vaultic's secure cryptographic engine with this interactive demonstration of RSA public-key
-        encryption
-      </p>
-      <div class="powered-by">
-        Powered by <a href="https://github.com/vaultic-org/vaultic-crypto-engine">vaultic-crypto-engine</a> —
-        High-performance cryptography in your browser
-      </div>
-    </header>
-
-    <div class="process-flow">
-      <div class="step">
-        <div class="step-icon">
-          <i class="fas fa-key"></i>
-        </div>
-        <p class="step-text">Generate Key Pair</p>
-      </div>
-      <div class="step">
-        <div class="step-icon">
-          <i class="fas fa-lock"></i>
-        </div>
-        <p class="step-text">Encrypt Message</p>
-      </div>
-      <div class="step">
-        <div class="step-icon">
-          <i class="fas fa-unlock"></i>
-        </div>
-        <p class="step-text">Decrypt Message</p>
-      </div>
-      <div class="step">
-        <div class="step-icon">
-          <i class="fas fa-check-circle"></i>
-        </div>
-        <p class="step-text">Verify Result</p>
+      
+      .preloader-dot:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      
+      .preloader-dot:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+      
+      @keyframes bounce {
+        0%, 100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        50% {
+          transform: translateY(-12px);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Preloader that will be displayed until React is loaded -->
+      <div class="preloader">
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
+        <div class="preloader-dot"></div>
       </div>
     </div>
-
-
-
-    <div class="card">
-      <div class="card-title">
-        <i class="fas fa-edit"></i> Message Input
-      </div>
-      <div class="input-group">
-        <label for="message">Enter a message to encrypt with Vaultic's RSA implementation:</label>
-        <input type="text" id="message" placeholder="Type your secret message here..." />
-      </div>
-      <div class="button-group">
-        <button id="generate-keys">
-          <i class="fas fa-key"></i> Generate Vaultic RSA Keys
-        </button>
-        <button id="encrypt" disabled>
-          <i class="fas fa-lock"></i> Encrypt
-        </button>
-        <button id="decrypt" disabled>
-          <i class="fas fa-unlock"></i> Decrypt
-        </button>
-        <button id="reset" class="secondary-btn" disabled>
-          <i class="fas fa-redo"></i> Reset
-        </button>
-        <div id="loading" class="loading"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <i class="fas fa-layer-group"></i> Adaptive Encryption Technology
-      </div>
-      <p>
-        Vaultic's intelligent encryption engine automatically selects the optimal encryption method based on your data:
-      </p>
-
-      <p>
-        <strong>All handled automatically</strong> - developers and users don't need to worry about encryption method
-        selection or data size limitations.
-      </p>
-    </div>
-
-    <div id="key-output" class="card output-section">
-      <div class="card-title">
-        <i class="fas fa-key"></i> Vaultic RSA Key Pair
-      </div>
-      <div class="input-group">
-        <label for="public-key">Public Key (for encryption):</label>
-        <div class="textarea-wrapper">
-          <textarea id="public-key" readonly></textarea>
-          <button id="copy-public-key" class="copy-btn">
-            <i class="fas fa-copy"></i> Copy
-          </button>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="private-key">Private Key (for decryption):</label>
-        <div class="textarea-wrapper">
-          <textarea id="private-key" readonly></textarea>
-          <button id="copy-private-key" class="copy-btn">
-            <i class="fas fa-copy"></i> Copy
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div id="result-output" class="card output-section">
-      <div class="card-title">
-        <i class="fas fa-exchange-alt"></i> Encryption Results
-      </div>
-      <div class="input-group">
-        <label for="encrypted">Encrypted Message:</label>
-        <div class="textarea-wrapper">
-          <textarea id="encrypted" readonly></textarea>
-          <button id="copy-encrypted" class="copy-btn">
-            <i class="fas fa-copy"></i> Copy
-          </button>
-        </div>
-      </div>
-      <div class="input-group">
-        <label for="decrypted">Decrypted Message:</label>
-        <textarea id="decrypted" readonly></textarea>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <i class="fas fa-terminal"></i> Operation Log
-      </div>
-      <div class="log-container" id="log"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <i class="fas fa-info-circle"></i> About Vaultic Crypto Engine
-      </div>
-      <p>
-        Vaultic Crypto Engine is a high-performance cryptographic library that provides secure RSA operations with
-        support for both native Rust and WebAssembly environments.
-      </p>
-
-      <div class="vaultic-features">
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <div class="feature-text">
-            <h4>Enhanced Security</h4>
-            <p>Includes mitigations against timing attacks and implements best-practice RSA padding</p>
-          </div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-tachometer-alt"></i>
-          </div>
-          <div class="feature-text">
-            <h4>High Performance</h4>
-            <p>Built with Rust and compiled to WebAssembly for optimal speed and security</p>
-          </div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-globe"></i>
-          </div>
-          <div class="feature-text">
-            <h4>Cross-Platform</h4>
-            <p>Works seamlessly in browsers, Node.js, and native Rust environments</p>
-          </div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-code"></i>
-          </div>
-          <div class="feature-text">
-            <h4>Developer Friendly</h4>
-            <p>Simple API with comprehensive documentation and examples</p>
-          </div>
-        </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">
-            <i class="fas fa-expand-arrows-alt"></i>
-          </div>
-          <div class="feature-text">
-            <h4>Handles Data of Any Size</h4>
-            <p>Automatically switches between direct RSA and hybrid RSA+AES encryption based on data size</p>
-          </div>
-        </div>
-
-      </div>
-
-      <p style="margin-top: 20px;">
-        <strong>Key Features:</strong>
-      </p>
-      <ul>
-        <li><strong>RSA Key Generation:</strong> Secure 2048-bit RSA key pairs</li>
-        <li><strong>Encryption/Decryption:</strong> RSA-PKCS#1 with proper padding</li>
-        <li><strong>Base64 Encoding:</strong> For easy transport and storage</li>
-        <li><strong>Attack Mitigations:</strong> Includes protections against the Marvin timing attack</li>
-      </ul>
-      <p>
-        Learn more about Vaultic Crypto Engine on <a href="https://github.com/vaultic-org/vaultic-crypto-engine"
-          style="color: var(--primary-color); text-decoration: none; font-weight: 600;">GitHub</a>.
-      </p>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <i class="fas fa-layer-group"></i> Adaptive Encryption Technology
-      </div>
-      <p>
-        Vaultic's intelligent encryption engine automatically selects the optimal encryption method based on your data:
-      </p>
-
-      <div class="encryption-methods">
-        <div class="encryption-method">
-          <h4><i class="fas fa-bolt method-icon"></i> Direct RSA</h4>
-          <p>For small messages (&lt; 245 bytes), Vaultic uses direct RSA-2048 encryption for simplicity and security.
-          </p>
-        </div>
-
-        <div class="encryption-method">
-          <h4><i class="fas fa-shield-alt method-icon"></i> Hybrid RSA+AES</h4>
-          <p>For larger data, Vaultic seamlessly switches to hybrid encryption using AES-256-GCM with an RSA-encrypted
-            key.</p>
-        </div>
-      </div>
-    </div>
-    </div>
-
-    <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-col">
-          <h3>About Vaultic</h3>
-          <p>Vaultic is dedicated to building secure, high-performance cryptographic tools and libraries for modern
-            applications. Our mission is to make encryption accessible and easy to implement for developers.</p>
-        </div>
-        <div class="footer-col">
-          <h3>Resources</h3>
-          <ul class="footer-links">
-            <li><a href="https://github.com/vaultic-org/vaultic-crypto-engine">Vaultic Crypto Engine</a></li>
-            <li><a href="https://github.com/vaultic-org/vaultic-crypto-engine-demo">Demo Repository</a></li>
-            <li><a href="#">Documentation</a></li>
-            <li><a href="#">API Reference</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h3>Community</h3>
-          <ul class="footer-links">
-            <li><a href="https://github.com/vaultic-org"><i class="fab fa-github"></i> GitHub</a></li>
-            <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
-            <li><a href="#"><i class="fab fa-discord"></i> Discord</a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i> Contact Us</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Vaultic Organization | <a href="#" style="color: inherit;">Privacy Policy</a> | <a href="#"
-            style="color: inherit;">Terms of Service</a></p>
-      </div>
-    </footer>
-
-    <script type="module" src="/main.js"></script>
-</body>
-
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Hide the preloader when React is loaded
+      window.addEventListener('load', function() {
+        const preloader = document.querySelector('.preloader');
+        if (preloader) {
+          preloader.classList.add('loaded');
+          // Remove the preloader from the DOM after the animation
+          setTimeout(() => {
+            if (preloader.parentNode) {
+              preloader.parentNode.removeChild(preloader);
+            }
+          }, 300);
+        }
+      });
+    </script>
+    
+    <!-- Structured data (JSON-LD) for enhanced search results -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Vaultic Crypto Engine",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Cross-platform",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD"
+        },
+        "description": "Advanced cryptographic library for JavaScript and TypeScript"
+      }
+    </script>
+  </body>
 </html>
