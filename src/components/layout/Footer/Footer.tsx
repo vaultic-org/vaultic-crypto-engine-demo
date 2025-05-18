@@ -25,7 +25,7 @@ const Footer: FC = () => {
                 <i className="fab fa-github text-xl"></i>
               </a>
               <a 
-                href="https://twitter.com/vaultic" 
+                href="https://twitter.com/vaultic-org" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
@@ -34,7 +34,7 @@ const Footer: FC = () => {
                 <i className="fab fa-twitter text-xl"></i>
               </a>
               <a 
-                href="https://discord.gg/vaultic" 
+                href="https://discord.gg/aeBjmbtt" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"

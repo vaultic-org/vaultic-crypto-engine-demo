@@ -4,6 +4,7 @@
 [![Made with React](https://img.shields.io/badge/React-19-blue?logo=react)](https://reactjs.org)
 [![Made with TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)](https://www.typescriptlang.org)
 [![Made with Vite](https://img.shields.io/badge/Vite-6.3-blue?logo=vite)](https://vitejs.dev)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f1ef9f20-6acb-427c-a731-e044bf41579d/deploy-status)](https://app.netlify.com/projects/crypto-engine/deploys)
 
 Interactive demo application for [vaultic-crypto-engine](https://github.com/vaultic-org/vaultic-crypto-engine), showcasing browser-based cryptographic operations using WebAssembly.
 
