@@ -1,13 +1,14 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocalStorageEasterEgg } from '@/hooks/useLocalStorageEasterEgg';
+import { useAdminMode } from '@/hooks/useAdminMode';
 import { useState, useEffect } from 'react';
 
 /**
  * Component that displays an easter egg across the platform
- * when the user has added a secret in localStorage
+ * when the user has successfully solved the cryptographic challenge
+ * and activated admin mode
  */
 function LocalStorageEasterEgg() {
-  const isEasterEggActive = useLocalStorageEasterEgg();
+  const isEasterEggActive = useAdminMode();
   const [showCongrats, setShowCongrats] = useState(true);
   
   // Auto-hide congratulation message after 6 seconds

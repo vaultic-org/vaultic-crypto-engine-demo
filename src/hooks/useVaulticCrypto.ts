@@ -277,6 +277,8 @@ export const useVaulticCrypto = () => {
         unprotectKeyPair,
         protectMessageWithPassword,
         unprotectMessageWithPassword,
-        resetCrypto
+        resetCrypto,
+        setKeyPair,
+        setEncryptedMessage
     };
 };

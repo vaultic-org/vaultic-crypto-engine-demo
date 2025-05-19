@@ -13,6 +13,7 @@ import {
   InfoPanel 
 } from "@/components/feature/Demo";
 import useTranslation from "@/hooks/useTranslation";
+import { KeyPair } from "@/core/types/crypto.types";
 
 const Demo = () => {
   const { t } = useTranslation(['demo', 'common']);
@@ -31,6 +32,8 @@ const Demo = () => {
     encryptMessage,
     decryptMessage,
     resetCrypto,
+    setKeyPair,
+    setEncryptedMessage
   } = useVaulticCrypto();
 
   const { copyToClipboard } = useCopyToClipboard();
@@ -106,6 +109,25 @@ const Demo = () => {
     }
   };
 
+  // Handle custom private key input
+  const handlePrivateKeyEdit = (newPrivateKey: string) => {
+    if (keyPair && newPrivateKey) {
+      // Create new key pair with custom private key
+      const updatedKeyPair: KeyPair = {
+        ...keyPair,
+        private_pem: newPrivateKey
+      };
+      setKeyPair(updatedKeyPair);
+    }
+  };
+
+  // Handle custom encrypted message input
+  const handleEncryptedMessageEdit = (newEncryptedMessage: string) => {
+    if (newEncryptedMessage) {
+      setEncryptedMessage(newEncryptedMessage);
+    }
+  };
+
   // Determine if we're using hybrid encryption (message > 245 bytes)
   const isHybridEncryption = message.length > 245;
 
@@ -161,6 +183,7 @@ const Demo = () => {
                 keyPair={keyPair}
                 onCopyPublicKey={handleCopyPublicKey}
                 onCopyPrivateKey={handleCopyPrivateKey}
+                onPrivateKeyEdit={handlePrivateKeyEdit}
               />
 
               {/* Encryption Results */}
@@ -169,7 +192,9 @@ const Demo = () => {
                 decryptedMessage={decryptedMessage}
                 originalMessage={message}
                 onCopyEncrypted={handleCopyEncrypted}
+                onEncryptedMessageEdit={handleEncryptedMessageEdit}
                 isHybridEncryption={isHybridEncryption}
+                allowCustomEncrypted={Boolean(keyPair)}
               />
             </div>
 

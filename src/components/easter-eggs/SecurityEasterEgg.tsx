@@ -1,5 +1,66 @@
-// Easter egg component for cybersecurity experts
+import { useState } from 'react';
+
 function SecurityEasterEgg() {
+  const [showKey, setShowKey] = useState(false);
+  
+  const storePrivateKeyInIndexedDB = () => {
+    // Store private key in IndexedDB for later retrieval
+    if (window.indexedDB) {
+      const request = window.indexedDB.open("VaulticSecretDatabase", 1);
+      
+      request.onupgradeneeded = function() {
+        const db = request.result;
+        if (!db.objectStoreNames.contains('secrets')) {
+          db.createObjectStore('secrets', { keyPath: 'id' });
+        }
+      };
+      
+      request.onsuccess = function() {
+        const db = request.result;
+        const transaction = db.transaction(['secrets'], 'readwrite');
+        const objectStore = transaction.objectStore('secrets');
+        
+        const privateKeyData = {
+          id: 'admin_private_key',
+          key: `-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD5HfhP9y+Jeuc3
+VZGjpNO6JYhp7fyrT9nvlW0W4+KFLiOLjq3E9W//YlzhTtwvXnnzMPzig4FeJVDY
+nErj2QC0l8id0nkQmWKG45f9veVoIJEPrbx7vcWNISJn6hsgrW+AEavUIhLCNRyT
+A2xR8VDNk3mEOuN4ptsQpWVnoUSK+rya2Tudvi0UVmCkOnwK7kQ4KlEu7q/TEc0s
+etIJbmY+XXtmpjDPMKmfS9LK+tECMeqpyzaO7qsJEz+Ec3ZG5cT11UCcXyUbGh/8
+hzy6OG0AJEKSlm9cVcsrnKlSRLLcpE6nytoEAZaO+BwHCTYyMUtjTqWru0lPwUEq
+JYKqi3w5AgMBAAECggEAZHrkJ0zqjadXD4iiH8Fh7Rkqdp+ZZHfmza4VvD/apCFC
+EQ5RpLninL3N/MrUIP8YbTD7L1ofmhuvCk+wHUrv7+ew8YdtcXaMuR+ftKcdmuxX
+1l0bQ0X+IriUqhlRK9MIwD1gc0XzDwZhKiMdU8fj8adkQiOGkKmsfoBX8H6pqOxB
+3hfFudGOtH1LpBROK9P8fwxXKnvpmzzDOTByZD6EfVBL6JH7oO7EPF38FnT7Rou2
+wAwNiNWcnZZEboYoKCpnzKfdesMC3IlPjGwOvbynU2GVSRoz5PHFo4Bay1JK2o8g
+lHaYApNaBHJB6vENqarHVB73k21hL47rqKOzUb6QAQKBgQD5X+4mrPFkcRELn0Dh
+uK1YeaSfpwFv/8qBfdcfY2nso1o+SAUJDAY2JSkaMulMlIlfXHZiiZhPQ43xcqfX
+yu+rQLPL8koLIBzunpJfwVi7UaXScSUqni1p5mnkrAP/DGkyKmmHhyawt6YWxCGY
+POY5JpIIIW9KzDgkCAm+XuC1OQKBgQD/vEmLz+Yh95WEuzfpEwgbxPHUGL0AEiCX
+iBksw2kq1V0jReQ6bNqP4WO9BnYaYz9ljeFknwTqzMt/fdR20Dr6FknvhA5sPrON
+FPBvjwcyT47CdiraQqUXXYGnvBIyHEEfv2rFC0MY5lQlyiYnVeHUcQLF1+E58rti
+SOkn71//AQKBgAJJb+yo31nVc5uQrU6km+pYyzqvlGLLjLbdSZC/H6SM5vH1RR6N
+Hq12b8cOunb6UbwvI+LJcj0f2HhjXcir0sDWSg/PvAAYHkvN5ne8VSz6lbO1V+rp
+Im97LnNrZGn9WiWcn/UfNyqdtIc26zvzKwVRJjuu2s9rygQCktxNEHB5AoGBAKQT
+6hwKB11DvGqss/KWg11NvtqWBK1G9CJE7+IIfjE9M8St0wCpVpF5ysQ8oQnNI5/E
+qBgm7sC3JNlnoimY8D4EjutdjuNkV07tYFYzLirZYH7j0hq3J7UWCVnVENeVyTLV
+XWuPDj2ridG1IUWblIj4+Q52s8q6Mf+dR/qXWsABAoGARzoXFz8lLOzKxOwNxg1S
+zyEF967iojdoaNRbqScHkh6tfPR/9n7U9QWmWc0YJ/FtkjvwORWYyHTApGX4Cd8A
+EA5sLCzxpBG3h1prP1Y9fln2CphD3ujJps6oJq+xhmEiz7KBDWd7FpuVgCnrv/2G
+9bqfsGL9GQSx5EX/J6uECao=
+-----END PRIVATE KEY-----`
+        };
+        
+        objectStore.put(privateKeyData);
+        
+        transaction.oncomplete = function() {
+          console.log("Private key stored in IndexedDB");
+        };
+      };
+    }
+  };
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-green-400 font-mono p-4">
       <h1 className="text-3xl mb-6 glitch-text">🔐 CYBERSECURITY EASTER EGG DISCOVERED 🔐</h1>
@@ -25,6 +86,57 @@ ADMIN_PASSWORD=vaultic-demo-password
         </pre>
       </div>
       
+      {/* Hidden button that can be revealed by modifying CSS in dev tools */}
+      <button 
+        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mb-4"
+        style={{ display: 'none' }} // Users need to change this to display: block
+        onClick={() => {
+          setShowKey(true);
+          storePrivateKeyInIndexedDB();
+        }}
+      >
+        REVEAL SECRET KEY
+      </button>
+      
+      {/* Secret key panel that appears when the hidden button is clicked */}
+      {showKey && (
+        <div className="mt-4 p-4 border border-red-500 rounded-md bg-black bg-opacity-80 max-w-3xl animate-pulse">
+          <h3 className="text-red-400 mb-2">🔑 SECRET PRIVATE KEY REVEALED 🔑</h3>
+          <pre className="bg-gray-900 p-4 rounded text-xs overflow-auto text-red-300">
+{`-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD5HfhP9y+Jeuc3
+VZGjpNO6JYhp7fyrT9nvlW0W4+KFLiOLjq3E9W//YlzhTtwvXnnzMPzig4FeJVDY
+nErj2QC0l8id0nkQmWKG45f9veVoIJEPrbx7vcWNISJn6hsgrW+AEavUIhLCNRyT
+A2xR8VDNk3mEOuN4ptsQpWVnoUSK+rya2Tudvi0UVmCkOnwK7kQ4KlEu7q/TEc0s
+etIJbmY+XXtmpjDPMKmfS9LK+tECMeqpyzaO7qsJEz+Ec3ZG5cT11UCcXyUbGh/8
+hzy6OG0AJEKSlm9cVcsrnKlSRLLcpE6nytoEAZaO+BwHCTYyMUtjTqWru0lPwUEq
+JYKqi3w5AgMBAAECggEAZHrkJ0zqjadXD4iiH8Fh7Rkqdp+ZZHfmza4VvD/apCFC
+EQ5RpLninL3N/MrUIP8YbTD7L1ofmhuvCk+wHUrv7+ew8YdtcXaMuR+ftKcdmuxX
+1l0bQ0X+IriUqhlRK9MIwD1gc0XzDwZhKiMdU8fj8adkQiOGkKmsfoBX8H6pqOxB
+3hfFudGOtH1LpBROK9P8fwxXKnvpmzzDOTByZD6EfVBL6JH7oO7EPF38FnT7Rou2
+wAwNiNWcnZZEboYoKCpnzKfdesMC3IlPjGwOvbynU2GVSRoz5PHFo4Bay1JK2o8g
+lHaYApNaBHJB6vENqarHVB73k21hL47rqKOzUb6QAQKBgQD5X+4mrPFkcRELn0Dh
+uK1YeaSfpwFv/8qBfdcfY2nso1o+SAUJDAY2JSkaMulMlIlfXHZiiZhPQ43xcqfX
+yu+rQLPL8koLIBzunpJfwVi7UaXScSUqni1p5mnkrAP/DGkyKmmHhyawt6YWxCGY
+POY5JpIIIW9KzDgkCAm+XuC1OQKBgQD/vEmLz+Yh95WEuzfpEwgbxPHUGL0AEiCX
+iBksw2kq1V0jReQ6bNqP4WO9BnYaYz9ljeFknwTqzMt/fdR20Dr6FknvhA5sPrON
+FPBvjwcyT47CdiraQqUXXYGnvBIyHEEfv2rFC0MY5lQlyiYnVeHUcQLF1+E58rti
+SOkn71//AQKBgAJJb+yo31nVc5uQrU6km+pYyzqvlGLLjLbdSZC/H6SM5vH1RR6N
+Hq12b8cOunb6UbwvI+LJcj0f2HhjXcir0sDWSg/PvAAYHkvN5ne8VSz6lbO1V+rp
+Im97LnNrZGn9WiWcn/UfNyqdtIc26zvzKwVRJjuu2s9rygQCktxNEHB5AoGBAKQT
+6hwKB11DvGqss/KWg11NvtqWBK1G9CJE7+IIfjE9M8St0wCpVpF5ysQ8oQnNI5/E
+qBgm7sC3JNlnoimY8D4EjutdjuNkV07tYFYzLirZYH7j0hq3J7UWCVnVENeVyTLV
+XWuPDj2ridG1IUWblIj4+Q52s8q6Mf+dR/qXWsABAoGARzoXFz8lLOzKxOwNxg1S
+zyEF967iojdoaNRbqScHkh6tfPR/9n7U9QWmWc0YJ/FtkjvwORWYyHTApGX4Cd8A
+EA5sLCzxpBG3h1prP1Y9fln2CphD3ujJps6oJq+xhmEiz7KBDWd7FpuVgCnrv/2G
+9bqfsGL9GQSx5EX/J6uECao=
+-----END PRIVATE KEY-----`}
+          </pre>
+          <p className="text-xs text-red-400 mt-2">This key has also been stored in your browser's IndexedDB.</p>
+          <p className="text-xs text-yellow-400 mt-2">Hint: Try checking the source code of this page for more secrets...</p>
+        </div>
+      )}
+      
       <div className="mt-6 text-center">
         <p className="text-xl mb-4">Share this discovery with:</p>
         <div className="flex space-x-4 justify-center">
@@ -33,7 +145,15 @@ ADMIN_PASSWORD=vaultic-demo-password
           <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">LinkedIn</button>
         </div>
       </div>
-      
+
+      {/* Hidden message in HTML comment that can be seen in view-source */}
+      {/* <!-- 
+        ENCRYPTED MESSAGE FOR ADMIN ACCESS:
+        jArsOjqfFOxmnWDLEmKMqy+We6fYQChVpKAqROt9gEHUfJbex8Xg6bwxyvpRC2yKGYtuFjJF/v1jdakBNLTfONb+vRpSr/3rFvOXilcF2KcEkGyy/YOEWHdeNjNDmfCdhSxiqj6uAsoPY8r1Bw2Bzo4nNhJ4/nIUAYy1WnI+P0D5/KcVHDZu+gjpPXzDmlgB90xhFwsLZ2EzT8hrkF+qiXbvPFUe+BDw1Z2lxkIu6Tbd/ArfKk/RSfQ6eGN8sbLSxySL2/StUNIwWuZGo4j8zQqSYS1L7EH57o9QfAWh8l8xjRfOJiifZg5XPu0taXtoeZw369ynfE0mkRtEJZAEjQ==
+        
+        Hint: Try the private key with our crypto demo...
+      --> */}
+
       <style dangerouslySetInnerHTML={{ __html: `
         .glitch-text {
           text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), 0.025em 0.05em 0 rgba(0, 0, 255, 0.75);

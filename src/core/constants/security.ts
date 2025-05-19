@@ -33,6 +33,5 @@ export const SENSITIVE_DOT_FILES = [
 
 // Secrets for the localStorage easter egg
 export const LOCAL_STORAGE_SECRETS = {
-    key: "ADMIN_PASSWORD",
-    value: "vaultic-demo-password"
+    key: "ADMIN_PASSWORD"
 };

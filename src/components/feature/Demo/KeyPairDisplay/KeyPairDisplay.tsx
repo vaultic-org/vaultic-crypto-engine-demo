@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/common/Button';
 import { Textarea } from '@/components/common/Textarea';
 import { Card } from '@/components/common/Card';
-import { Copy, Key, Shield, LockKeyhole } from 'lucide-react';
+import { Copy, Key, Shield, LockKeyhole, Edit, Save, RotateCcw } from 'lucide-react';
 import { Tooltip } from '@/components/common/Tooltip';
 import { KeyPairDisplayProps } from './KeyPairDisplay.types';
 import useTranslation from '@/hooks/useTranslation';
@@ -12,8 +12,28 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
   keyPair,
   onCopyPublicKey,
   onCopyPrivateKey,
+  onPrivateKeyEdit,
 }) => {
   const { t } = useTranslation(['demo', 'common']);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedPrivateKey, setEditedPrivateKey] = useState('');
+  
+  const handleSavePrivateKey = () => {
+    if (onPrivateKeyEdit && editedPrivateKey.trim()) {
+      onPrivateKeyEdit(editedPrivateKey);
+    }
+    setIsEditing(false);
+  };
+  
+  const handleStartEditing = () => {
+    setEditedPrivateKey(keyPair?.private_pem || '');
+    setIsEditing(true);
+  };
+  
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedPrivateKey('');
+  };
   
   if (!keyPair) return null;
 
@@ -50,15 +70,15 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
                     </Tooltip>
                   </div>
                 </div>
-                <div className="ml-4">
+                <div>
                   <Tooltip content={t('copy', { ns: 'common' })}>
                     <Button
                       onClick={onCopyPublicKey}
                       variant="ghost"
                       size="sm"
-                      className="text-gray-400 hover:text-white border border-gray-700"
+                      className="text-gray-400 hover:text-white border border-gray-700 h-10 w-10 p-0"
                     >
-                      <Copy className="w-3.5 h-3.5 mr-1" /> {t('copy', { ns: 'common' })}
+                      <Copy className="w-5 h-5" />
                     </Button>
                   </Tooltip>
                 </div>
@@ -89,29 +109,76 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
                     </Tooltip>
                   </div>
                 </div>
-                <div className="ml-4">
-                  <Tooltip content={t('copy', { ns: 'common' })}>
-                    <Button
-                      onClick={onCopyPrivateKey}
-                      variant="ghost"
-                      size="sm"
-                      className="text-gray-400 hover:text-white border border-gray-700"
-                    >
-                      <Copy className="w-3.5 h-3.5 mr-1" /> {t('copy', { ns: 'common' })}
-                    </Button>
-                  </Tooltip>
+                <div className="flex items-center">
+                  {!isEditing ? (
+                    <>
+                      <Tooltip content={t('copy', { ns: 'common' })}>
+                        <Button
+                          onClick={onCopyPrivateKey}
+                          variant="ghost"
+                          size="sm"
+                          className="text-gray-400 hover:text-white border border-gray-700 mr-2 h-10 w-10 p-0"
+                        >
+                          <Copy className="w-5 h-5" />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip content="Override with your own private key">
+                        <Button
+                          onClick={handleStartEditing}
+                          variant="ghost"
+                          size="sm"
+                          className="text-amber-400 hover:text-amber-300 border border-amber-800 h-10 w-10 p-0"
+                        >
+                          <Edit className="w-5 h-5" />
+                        </Button>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <>
+                      <Tooltip content="Save custom private key">
+                        <Button
+                          onClick={handleSavePrivateKey}
+                          variant="ghost"
+                          size="sm"
+                          className="text-green-400 hover:text-green-300 border border-green-800 mr-2 h-10 w-10 p-0"
+                        >
+                          <Save className="w-5 h-5" />
+                        </Button>
+                      </Tooltip>
+                      <Tooltip content="Cancel">
+                        <Button
+                          onClick={handleCancelEdit}
+                          variant="ghost"
+                          size="sm"
+                          className="text-gray-400 hover:text-white border border-gray-700 h-10 w-10 p-0"
+                        >
+                          <RotateCcw className="w-5 h-5" />
+                        </Button>
+                      </Tooltip>
+                    </>
+                  )}
                 </div>
               </div>
               <div>
                 <Textarea
-                  value={keyPair.private_pem}
-                  readOnly
-                  className="font-mono text-xs resize-none h-32 bg-gray-800/50 border-gray-700 focus:border-blue-600"
+                  value={isEditing ? editedPrivateKey : keyPair.private_pem}
+                  onChange={isEditing ? (e) => setEditedPrivateKey(e.target.value) : undefined}
+                  readOnly={!isEditing}
+                  className={`font-mono text-xs resize-none h-32 bg-gray-800/50 border-gray-700 focus:border-blue-600 ${
+                    isEditing ? 'border-amber-500 bg-gray-900/70' : ''
+                  }`}
+                  placeholder={isEditing ? "Paste your private key here..." : ""}
                 />
               </div>
               <div className="text-xs text-gray-500 flex items-center">
-                <span className="text-amber-400 mr-1">•</span>
-                {t('keyGeneration.privateKeyInfo', { ns: 'demo' })}
+                {isEditing ? (
+                  <span className="text-amber-400 mr-1">Edit mode: Paste your custom private key here</span>
+                ) : (
+                  <>
+                    <span className="text-amber-400 mr-1">•</span>
+                    {t('keyGeneration.privateKeyInfo', { ns: 'demo' })}
+                  </>
+                )}
               </div>
             </div>
           </div>

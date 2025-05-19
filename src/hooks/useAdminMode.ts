@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { LOCAL_STORAGE_SECRETS } from '@/core/constants/security';
+import { isAdminPassword } from '@/utils/crypto-helpers';
 
 /**
  * Hook to detect if admin mode is active by checking the localStorage
@@ -12,7 +13,27 @@ export function useAdminMode() {
     // Check if admin mode is active in localStorage
     const checkAdminMode = () => {
       const storedValue = localStorage.getItem(LOCAL_STORAGE_SECRETS.key);
-      setIsAdminMode(storedValue === LOCAL_STORAGE_SECRETS.value);
+      
+      if (storedValue) {
+        try {
+          // Check if the stored value is a valid admin password
+          if (isAdminPassword(storedValue)) {
+            setIsAdminMode(true);
+            
+            // Show congratulation message (only the first time)
+            if (!localStorage.getItem('admin_mode_activated')) {
+              console.log("%c🎉 CONGRATULATIONS! 🎉", "font-size: 20px; color: green; font-weight: bold");
+              console.log("%cYou have solved the crypto challenge and activated ADMIN MODE!", "font-size: 16px; color: green;");
+              localStorage.setItem('admin_mode_activated', 'true');
+            }
+            return;
+          }
+        } catch (error) {
+          console.error("Error checking admin password:", error);
+        }
+      }
+      
+      setIsAdminMode(false);
     };
     
     // Check on initial load

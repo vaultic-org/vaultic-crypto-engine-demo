@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { LOCAL_STORAGE_SECRETS } from '@/core/constants/security';
+import { isAdminPassword } from '@/utils/crypto-helpers';
 import { Outlet } from '@tanstack/react-router';
 import NotFoundPage from "@/routes/_404";
 
@@ -19,7 +20,11 @@ function SecretGameLayout() {
   useEffect(() => {
     const checkAuthorization = () => {
       try {
-        const hasSecretAccess = localStorage.getItem(LOCAL_STORAGE_SECRETS.key) === LOCAL_STORAGE_SECRETS.value;
+        // Get the stored value
+        const storedValue = localStorage.getItem(LOCAL_STORAGE_SECRETS.key);
+        
+        // Use the isAdminPassword function to check if the stored value is a valid admin password
+        const hasSecretAccess = storedValue ? isAdminPassword(storedValue) : false;
         setIsAuthorized(hasSecretAccess);
       } catch (error) {
         console.error("Auth check error:", error);

@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/common/Button';
 import { Textarea } from '@/components/common/Textarea';
 import { Card } from '@/components/common/Card';
-import { Copy, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
+import { Copy, RefreshCw, CheckCircle, XCircle, Edit, Save, RotateCcw } from 'lucide-react';
 import { Tooltip } from '@/components/common/Tooltip';
 import { EncryptionResultsProps } from './EncryptionResults.types';
 import useTranslation from '@/hooks/useTranslation';
@@ -13,11 +13,35 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
   decryptedMessage,
   originalMessage,
   onCopyEncrypted,
+  onEncryptedMessageEdit,
   isHybridEncryption = false,
+  allowCustomEncrypted = false
 }) => {
   const { t } = useTranslation(['demo', 'common']);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedEncryptedMessage, setEditedEncryptedMessage] = useState('');
   
-  if (!encryptedMessage) return null;
+  // Function to handle saving of edited encrypted message
+  const handleSaveEncryptedMessage = () => {
+    if (onEncryptedMessageEdit && editedEncryptedMessage.trim()) {
+      onEncryptedMessageEdit(editedEncryptedMessage);
+    }
+    setIsEditing(false);
+  };
+  
+  // Function to start editing with the current message
+  const handleStartEditing = () => {
+    setEditedEncryptedMessage(encryptedMessage || '');
+    setIsEditing(true);
+  };
+  
+  // Function to cancel editing
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedEncryptedMessage('');
+  };
+  
+  if (!encryptedMessage && !isEditing) return null;
   
   const isVerified = decryptedMessage && originalMessage && decryptedMessage === originalMessage;
   const hasDecrypted = Boolean(decryptedMessage);
@@ -48,27 +72,74 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
               <label className="block text-sm font-medium text-gray-300">
                 {t('encryption.result', { ns: 'demo' })}:
               </label>
-              <Tooltip content={t('copy', { ns: 'common' })}>
-                <Button
-                  onClick={onCopyEncrypted}
-                  variant="outline"
-                  size="sm"
-                  className="text-gray-300 hover:text-white border border-blue-700 hover:bg-blue-700/30"
-                >
-                  <Copy className="w-3.5 h-3.5 mr-1" /> {t('copy', { ns: 'common' })}
-                </Button>
-              </Tooltip>
+              <div className="flex">
+                {!isEditing ? (
+                  <>
+                    <Tooltip content={t('copy', { ns: 'common' })}>
+                      <Button
+                        onClick={onCopyEncrypted}
+                        variant="outline"
+                        size="sm"
+                        className="text-gray-300 hover:text-white border border-blue-700 hover:bg-blue-700/30 mr-2 h-10 w-10 p-0"
+                      >
+                        <Copy className="w-5 h-5" />
+                      </Button>
+                    </Tooltip>
+                    {allowCustomEncrypted && (
+                      <Tooltip content="Paste a custom encrypted message">
+                        <Button
+                          onClick={handleStartEditing}
+                          variant="outline"
+                          size="sm"
+                          className="text-blue-400 hover:text-blue-300 border border-blue-800 h-10 w-10 p-0"
+                        >
+                          <Edit className="w-5 h-5" />
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Tooltip content="Save custom encrypted message">
+                      <Button
+                        onClick={handleSaveEncryptedMessage}
+                        variant="outline"
+                        size="sm"
+                        className="text-green-400 hover:text-green-300 border border-green-700 mr-2 h-10 w-10 p-0"
+                      >
+                        <Save className="w-5 h-5" />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip content="Cancel">
+                      <Button
+                        onClick={handleCancelEdit}
+                        variant="outline"
+                        size="sm"
+                        className="text-gray-400 hover:text-white border border-gray-700 h-10 w-10 p-0"
+                      >
+                        <RotateCcw className="w-5 h-5" />
+                      </Button>
+                    </Tooltip>
+                  </>
+                )}
+              </div>
             </div>
             <div className="relative">
               <Textarea
-                value={encryptedMessage}
-                readOnly
-                className="font-mono text-xs bg-gray-800/50 border-gray-700 focus:border-blue-600"
+                value={isEditing ? editedEncryptedMessage : encryptedMessage}
+                onChange={isEditing ? (e) => setEditedEncryptedMessage(e.target.value) : undefined}
+                readOnly={!isEditing}
+                className={`font-mono text-xs bg-gray-800/50 border-gray-700 focus:border-blue-600 ${
+                  isEditing ? 'border-blue-500 bg-gray-900/70' : ''
+                }`}
+                placeholder={isEditing ? "Paste your custom encrypted message here..." : ""}
                 rows={4}
               />
             </div>
             <div className="text-xs text-gray-500 flex items-center">
-              {isHybridEncryption ? (
+              {isEditing ? (
+                <span className="text-blue-400 mr-1">Edit mode: Paste your custom encrypted message here</span>
+              ) : isHybridEncryption ? (
                 <>
                   <span className="text-blue-400 mr-1">•</span>
                   {t('encryption.usingHybrid', { ns: 'demo' })}
@@ -119,13 +190,13 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
                 <div>
                   <p className="font-medium">
                     {isVerified
-                      ? t('decryption.success', 'Vérification réussie !', { ns: 'demo' })
-                      : t('decryption.error', 'Échec de la vérification !', { ns: 'demo' })}
+                      ? t('decryption.success', { ns: 'demo' })
+                      : t('decryption.error', { ns: 'demo' })}
                   </p>
                   <p className="text-sm opacity-80">
                     {isVerified
-                      ? t('decryption.matchMessage', 'Le message déchiffré correspond à l\'original. Le cycle de chiffrement/déchiffrement est complet et vérifié.', { ns: 'demo' })
-                      : t('decryption.mismatchMessage', 'Le message déchiffré diffère de l\'entrée originale.', { ns: 'demo' })}
+                      ? t('decryption.matchMessage', { ns: 'demo' })
+                      : t('decryption.mismatchMessage', { ns: 'demo' })}
                   </p>
                 </div>
               </div>
