@@ -150,7 +150,6 @@ EA5sLCzxpBG3h1prP1Y9fln2CphD3ujJps6oJq+xhmEiz7KBDWd7FpuVgCnrv/2G
 -----END PRIVATE KEY-----`}
           </pre>
           <p className="text-xs text-red-400 mt-2">This key has also been stored in your browser's IndexedDB.</p>
-          <p className="text-xs text-yellow-400 mt-2">Hint: Try checking the source code of this page for more secrets...</p>
         </div>
       )}
       
