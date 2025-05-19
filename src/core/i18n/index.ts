@@ -12,6 +12,8 @@ import demoEN from './locales/en/demo.json';
 import demoFR from './locales/fr/demo.json';
 import documentationEN from './locales/en/documentation.json';
 import documentationFR from './locales/fr/documentation.json';
+import gameEN from './locales/en/game.json';
+import gameFR from './locales/fr/game.json';
 
 // Ressources préchargées pour un démarrage rapide
 const resources = {
@@ -19,13 +21,15 @@ const resources = {
     common: commonEN,
     home: homeEN,
     demo: demoEN,
-    documentation: documentationEN
+    documentation: documentationEN,
+    game: gameEN
   },
   fr: {
     common: commonFR,
     home: homeFR,
     demo: demoFR,
-    documentation: documentationFR
+    documentation: documentationFR,
+    game: gameFR
   }
 };
 
@@ -43,7 +47,7 @@ i18n
     debug: process.env.NODE_ENV === 'development',
     
     // Translation namespaces
-    ns: ['common', 'home', 'demo', 'documentation'],
+    ns: ['common', 'home', 'demo', 'documentation', 'game'],
     defaultNS: 'common',
     
     // Interpolation

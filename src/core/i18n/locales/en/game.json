@@ -1,0 +1,32 @@
+{
+  "title": "Decryption Challenge",
+  "description": "Test your decryption skills! Decrypt the message before time runs out.",
+  "difficulty": "Select Difficulty",
+  "startGame": "Start Game",
+  "gameOver": "Game Over!",
+  "finalScore": "Your final score",
+  "newHighScore": "New High Score!",
+  "playAgain": "Play Again",
+  "score": "Score",
+  "time": "Time",
+  "challenge": "Challenge",
+  "decryptionMethod": "Decryption Method",
+  "key": "Key",
+  "yourDecryption": "Your decrypted message",
+  "placeholder": "Type your answer here...",
+  "submitAnswer": "Submit Answer",
+  "correct": "Correct!",
+  "incorrect": "Incorrect! Try again.",
+  "points": "points",
+  "endGame": "End Game",
+  "howToPlay": "How to play:",
+  "instructions": {
+    "step1": "Look at the encrypted message and the decryption method",
+    "step2": "Manually decrypt the message using the given cipher and key",
+    "step3": "Enter your answer in the input field and submit",
+    "step4": "Score points for each correct decryption",
+    "step5": "Race against the clock to get the highest score!"
+  },
+  "secretPageTitle": "Secret Crypto Game",
+  "secretPageDescription": "Congratulations on finding the secret admin mode! Test your encryption and decryption skills in this exclusive game."
+}

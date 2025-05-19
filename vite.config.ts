@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, splitVendorChunkPlugin } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import wasm from 'vite-plugin-wasm';
@@ -25,7 +25,8 @@ export default defineConfig({
     compression({
       algorithm: 'brotliCompress',
       ext: '.br'
-    })
+    }),
+    splitVendorChunkPlugin()
   ],
   resolve: {
     alias: {
@@ -62,6 +63,7 @@ export default defineConfig({
         '</fonts/inter.woff2>; rel=preload; as=font; crossorigin',
         '</vaultic-logo.svg>; rel=preload; as=image'
       ]
-    }
+    },
+    port: 5173
   }
 });

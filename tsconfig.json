@@ -33,6 +33,6 @@
       "@/assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "src/routes/.env.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,0 +1,32 @@
+{
+  "title": "Prêt à déchiffrer ?",
+  "description": "Testez vos compétences en déchiffrement ! Décryptez le message avant la fin du temps imparti.",
+  "difficulty": "Sélectionner la difficulté",
+  "startGame": "Commencer le jeu",
+  "gameOver": "Partie terminée !",
+  "finalScore": "Votre score final",
+  "newHighScore": "Nouveau record !",
+  "playAgain": "Rejouer",
+  "score": "Score",
+  "time": "Temps",
+  "challenge": "Défi",
+  "decryptionMethod": "Méthode de déchiffrement",
+  "key": "Clé",
+  "yourDecryption": "Votre message déchiffré",
+  "placeholder": "Tapez votre réponse ici ...",
+  "submitAnswer": "Soumettre la réponse",
+  "correct": "Correct !",
+  "incorrect": "Incorrect ! Réessayez.",
+  "points": "points",
+  "endGame": "Terminer la partie",
+  "howToPlay": "Comment jouer :",
+  "instructions": {
+    "step1": "Regardez le message chiffré et la méthode de déchiffrement",
+    "step2": "Déchiffrez manuellement le message en utilisant le chiffrement et la clé donnés",
+    "step3": "Entrez votre réponse dans le champ de saisie et soumettez-la",
+    "step4": "Gagnez un maximum de points pour chaque déchiffrement correct",
+    "step5": "Faites la course contre la montre pour obtenir le meilleur score !"
+  },
+  "secretPageTitle": "CryptoSecret",
+  "secretPageDescription": "Félicitations pour avoir trouvé le mode admin secret ! 😊 Testez vos compétences en chiffrement et déchiffrement dans ce jeu ... bien caché !"
+} 

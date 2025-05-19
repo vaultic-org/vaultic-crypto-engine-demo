@@ -2,6 +2,7 @@
   command = "pnpm run build"
   publish = "dist"
 
+# Global redirect for all th URLs
 [[redirects]]
   from = "/*"
   to = "/index.html"
