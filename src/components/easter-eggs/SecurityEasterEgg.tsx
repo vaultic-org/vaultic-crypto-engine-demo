@@ -152,15 +152,6 @@ EA5sLCzxpBG3h1prP1Y9fln2CphD3ujJps6oJq+xhmEiz7KBDWd7FpuVgCnrv/2G
           <p className="text-xs text-red-400 mt-2">This key has also been stored in your browser's IndexedDB.</p>
         </div>
       )}
-      
-      <div className="mt-6 text-center">
-        <p className="text-xl mb-4">Share this discovery with:</p>
-        <div className="flex space-x-4 justify-center">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Twitter</button>
-          <button className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Discord</button>
-          <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">LinkedIn</button>
-        </div>
-      </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
         .glitch-text {
