@@ -19,10 +19,10 @@ export const Usage = () => {
           <CodeExamples
             language="javascript"
             title="Key Generation Example"
-            code={`import { generate_rsa_keypair_pem } from 'vaultic-crypto-engine';
+            code={`import { generate_rsa_keypair_pem } from '@vaultic/crypto-engine';
 
 // Generate a 2048-bit RSA key pair (default)
-const keypair = generate_rsa_keypair_pem();
+const keypair = await generate_rsa_keypair_pem();
 console.log('Public Key:', keypair.public_pem);
 console.log('Private Key:', keypair.private_pem);`}
           />
@@ -30,58 +30,83 @@ console.log('Private Key:', keypair.private_pem);`}
 
         <div id="encryption" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="encryption-heading">Encryption</h2>
-          <p className="text-gray-300 mb-4 text-pretty">Encrypt any message using your public key:</p>
+          <p className="text-gray-300 mb-4 text-pretty">Encrypt any message using your public key - hybrid encryption is automatic:</p>
           <CodeExamples
             language="javascript"
             title="Encryption Example"
-            code={`import { rsa_encrypt_base64 } from 'vaultic-crypto-engine';
+            code={`import { rsa_encrypt_base64 } from '@vaultic/crypto-engine';
 
-const message = 'Secret message';
-const encrypted = rsa_encrypt_base64(keypair.public_pem, message);
+// Works with messages of any size - hybrid encryption is automatic
+const message = 'Secret message - can be any length, Vaultic handles it automatically';
+const encrypted = await rsa_encrypt_base64(keypair.public_pem, message);
 console.log('Encrypted:', encrypted);`}
           />
         </div>
 
         <div id="decryption" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="decryption-heading">Decryption</h2>
-          <p className="text-gray-300 mb-4 text-pretty">Decrypt messages with your private key:</p>
+          <p className="text-gray-300 mb-4 text-pretty">Decrypt messages using your private key - format detection is automatic:</p>
           <CodeExamples
             language="javascript"
             title="Decryption Example"
-            code={`import { rsa_decrypt_base64 } from 'vaultic-crypto-engine';
+            code={`import { rsa_decrypt_base64 } from '@vaultic/crypto-engine';
 
-const decrypted = rsa_decrypt_base64(keypair.private_pem, encrypted);
-console.log('Decrypted:', decrypted);
-
-// Verify we got our original message back
-console.log('Original message restored:', message === decrypted);`}
+// Automatically detects encryption method (direct RSA or hybrid)
+const decrypted = await rsa_decrypt_base64(keypair.private_pem, encrypted);
+console.log('Decrypted:', decrypted);`}
           />
         </div>
 
-        <div id="complete-example" className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="complete-example-heading">Complete Example</h2>
-          <p className="text-gray-300 mb-4 text-pretty">Here's a complete example that demonstrates the entire workflow:</p>
+        <div id="key-protection" className="mb-8">
+          <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="key-protection-heading">Key Pair Protection</h2>
+          <p className="text-gray-300 mb-4 text-pretty">Protect your key pair with a password:</p>
           <CodeExamples
             language="javascript"
-            title="Complete Example"
-            code={`import { generate_rsa_keypair_pem, rsa_encrypt_base64, rsa_decrypt_base64 } from 'vaultic-crypto-engine';
+            title="Key Protection Example"
+            code={`import { protect_keypair, unprotect_keypair } from '@vaultic/crypto-engine';
 
-// Generate a key pair
-const keypair = generate_rsa_keypair_pem();
-    
-// Message to encrypt
-const message = "This is a secret message";
-    
-// Encrypt with the public key
-const encrypted = rsa_encrypt_base64(keypair.public_pem, message);
-console.log("Encrypted:", encrypted);
-    
-// Decrypt with the private key
-const decrypted = rsa_decrypt_base64(keypair.private_pem, encrypted);
-console.log("Decrypted:", decrypted);
-    
-// Verify original message was restored
-console.assert(message === decrypted, "Decryption failed!");`}
+// Protect a key pair with a password
+const passphrase = "secure-password-123";
+const protectedKeypair = await protect_keypair(
+  keypair.private_pem, 
+  keypair.public_pem, 
+  passphrase
+);
+
+// Store the protected key pair
+console.log('Protected Private Key:', protectedKeypair.encrypted_private);
+console.log('Salt:', protectedKeypair.salt);
+console.log('Nonce:', protectedKeypair.nonce);
+
+// Later, unprotect the key pair
+const recoveredKeypair = await unprotect_keypair(protectedKeypair, passphrase);`}
+          />
+        </div>
+
+        <div id="message-protection" className="mb-8">
+          <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="message-protection-heading">Message Protection</h2>
+          <p className="text-gray-300 mb-4 text-pretty">Encrypt messages with password-based protection:</p>
+          <CodeExamples
+            language="javascript"
+            title="Message Protection Example"
+            code={`import { protect_message, unprotect_message } from '@vaultic/crypto-engine';
+
+// Protect a message with a password
+const message = "Secret message protected with password";
+const protectedMessage = await protect_message(message, passphrase);
+
+// Store the protected message
+console.log('Protected Message:', protectedMessage.ciphertext);
+console.log('Salt:', protectedMessage.salt);
+console.log('Nonce:', protectedMessage.nonce);
+
+// Later, unprotect the message
+const recoveredMessage = await unprotect_message(
+  protectedMessage.ciphertext,
+  passphrase,
+  protectedMessage.salt,
+  protectedMessage.nonce
+);`}
           />
         </div>
       </div>

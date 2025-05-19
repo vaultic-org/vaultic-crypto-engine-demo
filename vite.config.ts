@@ -5,7 +5,9 @@ import wasm from 'vite-plugin-wasm';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
-// On Netlify, we don't need a base path
+import { visualizer } from 'rollup-plugin-visualizer';
+import compression from 'vite-plugin-compression';
+
 const base = '';
 
 export default defineConfig({
@@ -13,7 +15,17 @@ export default defineConfig({
     react(),
     wasm(),
     topLevelAwait(),
-    TanStackRouterVite()
+    TanStackRouterVite(),
+    process.env.ANALYZE && visualizer({
+      open: true,
+      filename: 'dist/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),
+    compression({
+      algorithm: 'brotliCompress',
+      ext: '.br'
+    })
   ],
   resolve: {
     alias: {
@@ -21,7 +33,35 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['vaultic-crypto-engine']
+    exclude: ['@vaultic/crypto-engine']
   },
-  base: base
+  build: {
+    cssCodeSplit: false,
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['@tanstack/react-router'],
+          ui: ['framer-motion', 'lucide-react'],
+        }
+      }
+    }
+  },
+  base: base,
+  server: {
+    headers: {
+      'Link': [
+        '</fonts/inter.woff2>; rel=preload; as=font; crossorigin',
+        '</vaultic-logo.svg>; rel=preload; as=image'
+      ]
+    }
+  }
 });

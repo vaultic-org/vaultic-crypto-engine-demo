@@ -3,13 +3,17 @@ import { useLogStore } from '@/core/store/logStore';
 import {
     generate_rsa_keypair_pem,
     rsa_encrypt_base64,
-    rsa_decrypt_base64
-} from 'vaultic-crypto-engine';
-import { KeyPair } from '@/core/types/crypto.types';
+    rsa_decrypt_base64,
+    protect_keypair,
+    unprotect_keypair,
+    protect_message,
+    unprotect_message
+} from '@vaultic/crypto-engine';
+import { KeyPair, ProtectedKeyPair, ProtectedMessage } from '@/core/types/crypto.types';
 
 /**
  * Custom hook to provide Vaultic cryptography functionality
- * Handles both direct RSA encryption and hybrid RSA+AES for larger data
+ * Handles RSA operations with automatic hybrid encryption for larger data
  */
 export const useVaulticCrypto = () => {
     const [keyPair, setKeyPair] = useState<KeyPair | null>(null);
@@ -18,121 +22,10 @@ export const useVaulticCrypto = () => {
     const [isDecrypting, setIsDecrypting] = useState(false);
     const [encryptedMessage, setEncryptedMessage] = useState<string>('');
     const [decryptedMessage, setDecryptedMessage] = useState<string>('');
+    const [isProtecting, setIsProtecting] = useState(false);
+    const [isUnprotecting, setIsUnprotecting] = useState(false);
 
     const addLog = useLogStore(state => state.addLog);
-
-    /**
-     * Unified Vaultic encryption function - automatically handles data of any size
-     * @param {string} publicKeyPem - RSA public key in PEM format
-     * @param {string} data - Data to encrypt
-     * @returns {Promise<string>} - Encrypted data as an encoded string
-     */
-    const vaultic_encrypt = useCallback(async (publicKeyPem: string, data: string): Promise<string> => {
-        // Convert to Uint8Array
-        const dataArray = new TextEncoder().encode(data);
-
-        // Determine max size for direct RSA (2048 bits = 256 bytes minus padding)
-        const MAX_RSA_SIZE = 245; // For RSA-2048 with PKCS#1 v1.5 padding
-
-        // Automatically choose the method based on data size
-        if (dataArray.length <= MAX_RSA_SIZE) {
-            // Simple case: use RSA directly
-            return rsa_encrypt_base64(publicKeyPem, data);
-        } else {
-            // Complex case: use the hybrid approach
-            addLog('Data exceeds RSA capacity, using hybrid RSA+AES encryption', 'info');
-            
-            // 1. Generate a random AES key (256 bits)
-            const aesKey = crypto.getRandomValues(new Uint8Array(32));
-
-            // 2. Generate a random IV for AES-GCM
-            const iv = crypto.getRandomValues(new Uint8Array(12));
-
-            // 3. Import the AES key into the Web Crypto API
-            const cryptoKey = await window.crypto.subtle.importKey(
-                "raw",
-                aesKey,
-                { name: "AES-GCM", length: 256 },
-                false,
-                ["encrypt"]
-            );
-
-            // 4. Encrypt the data with AES-GCM
-            const encryptedData = await window.crypto.subtle.encrypt(
-                { name: "AES-GCM", iv: iv },
-                cryptoKey,
-                dataArray
-            );
-
-            // 5. Encrypt the AES key with RSA
-            const aesKeyBase64 = btoa(String.fromCharCode.apply(null, [...new Uint8Array(aesKey)]));
-            const encryptedAesKey = await rsa_encrypt_base64(publicKeyPem, aesKeyBase64);
-
-            // 6. Format and return the result
-            return btoa(
-                JSON.stringify({
-                    mode: "hybrid",
-                    iv: Array.from(iv),
-                    encryptedKey: encryptedAesKey,
-                    encryptedData: Array.from(new Uint8Array(encryptedData)),
-                })
-            );
-        }
-    }, [addLog]);
-
-    /**
-     * Unified Vaultic decryption function - automatically handles data of any size
-     * @param {string} privateKeyPem - RSA private key in PEM format
-     * @param {string} encryptedData - Encrypted data as an encoded string
-     * @returns {Promise<string>} - Decrypted data as a string
-     */
-    const vaultic_decrypt = useCallback(async (privateKeyPem: string, encryptedData: string): Promise<string> => {
-        try {
-            // First try to detect if it's a hybrid format
-            const potentialJson = atob(encryptedData);
-            const parsed = JSON.parse(potentialJson);
-
-            if (parsed.mode === "hybrid") {
-                addLog('Detected hybrid RSA+AES encryption, using appropriate method', 'info');
-                
-                // 1. Decrypt the AES key with RSA
-                const aesKeyBase64 = await rsa_decrypt_base64(privateKeyPem, parsed.encryptedKey);
-                const aesKeyStr = atob(aesKeyBase64);
-                const aesKey = new Uint8Array(aesKeyStr.length);
-                for (let i = 0; i < aesKeyStr.length; i++) {
-                    aesKey[i] = aesKeyStr.charCodeAt(i);
-                }
-
-                // 2. Import the AES key into the Web Crypto API
-                const cryptoKey = await window.crypto.subtle.importKey(
-                    "raw",
-                    aesKey,
-                    { name: "AES-GCM", length: 256 },
-                    false,
-                    ["decrypt"]
-                );
-
-                // 3. Decrypt the data with AES-GCM
-                const iv = new Uint8Array(parsed.iv);
-                const encryptedDataArray = new Uint8Array(parsed.encryptedData);
-                const decryptedData = await window.crypto.subtle.decrypt(
-                    { name: "AES-GCM", iv: iv },
-                    cryptoKey,
-                    encryptedDataArray
-                );
-
-                // 4. Return the decrypted data as a string
-                return new TextDecoder().decode(decryptedData);
-            }
-        } catch {
-            // If we can't parse as JSON or if it's not hybrid,
-            // it's probably direct RSA encryption
-            addLog('Using standard RSA decryption', 'info');
-        }
-
-        // Default case: direct RSA
-        return rsa_decrypt_base64(privateKeyPem, encryptedData);
-    }, [addLog]);
 
     const generateKeyPair = useCallback(async () => {
         try {
@@ -177,20 +70,15 @@ export const useVaulticCrypto = () => {
             setIsEncrypting(true);
             addLog(`Vaultic engine encrypting message (${message.length} bytes)...`, 'info');
 
-            // Use the enhanced encryption function that handles any data size
-            const encrypted = await vaultic_encrypt(publicKeyToUse, message);
+            // The library now automatically handles hybrid encryption
+            const encrypted = await rsa_encrypt_base64(publicKeyToUse, message);
             setEncryptedMessage(encrypted);
 
-            // Detect which method was used (simple heuristic based on result length)
-            const isHybrid = encrypted.length > 500; // Simple estimation
-
-            if (isHybrid) {
-                addLog('✅ Message encrypted using Vaultic\'s hybrid RSA+AES encryption', 'success');
-                addLog('Large data automatically handled with enterprise-grade security', 'info');
-            } else {
-                addLog('✅ Message encrypted using Vaultic\'s direct RSA encryption', 'success');
+            addLog('✅ Message encrypted successfully', 'success');
+            // Hybrid encryption is now automatic based on message size
+            if (message.length > 190) {
+                addLog('Large data automatically handled with hybrid RSA+AES encryption', 'info');
             }
-
             addLog('The message can now only be decrypted with the matching private key', 'info');
 
             return encrypted;
@@ -202,7 +90,7 @@ export const useVaulticCrypto = () => {
         } finally {
             setIsEncrypting(false);
         }
-    }, [keyPair, addLog, vaultic_encrypt]);
+    }, [keyPair, addLog]);
 
     const decryptMessage = useCallback(async (encryptedData: string, privateKey?: string) => {
         try {
@@ -222,8 +110,8 @@ export const useVaulticCrypto = () => {
             addLog('Vaultic engine decrypting message...', 'info');
 
             try {
-                // Use the enhanced decryption function that auto-detects the encryption method
-                const decrypted = await vaultic_decrypt(privateKeyToUse, encryptedData);
+                // The library now automatically detects the encryption method
+                const decrypted = await rsa_decrypt_base64(privateKeyToUse, encryptedData);
                 setDecryptedMessage(decrypted);
                 addLog('✅ Vaultic decryption successful', 'success');
 
@@ -242,7 +130,126 @@ export const useVaulticCrypto = () => {
         } finally {
             setIsDecrypting(false);
         }
-    }, [keyPair, addLog, vaultic_decrypt]);
+    }, [keyPair, addLog]);
+
+    const protectKeyPair = useCallback(async (passphrase: string, keyPairToProtect?: KeyPair) => {
+        try {
+            const keyPairToUse = keyPairToProtect || keyPair;
+            if (!keyPairToUse) {
+                addLog('⚠️ No key pair available to protect', 'error');
+                throw new Error('No key pair available');
+            }
+
+            if (!passphrase) {
+                addLog('⚠️ Please provide a passphrase', 'error');
+                throw new Error('No passphrase provided');
+            }
+
+            setIsProtecting(true);
+            addLog('Protecting key pair with password...', 'info');
+
+            const protectedKeys = await protect_keypair(
+                keyPairToUse.private_pem,
+                keyPairToUse.public_pem,
+                passphrase
+            );
+
+            addLog('✅ Key pair protected successfully', 'success');
+            return protectedKeys;
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            addLog(`❌ Key protection error: ${errorMessage}`, 'error');
+            console.error('Complete error:', error);
+            throw error;
+        } finally {
+            setIsProtecting(false);
+        }
+    }, [keyPair, addLog]);
+
+    const unprotectKeyPair = useCallback(async (protectedKeyPair: ProtectedKeyPair, passphrase: string) => {
+        try {
+            if (!passphrase) {
+                addLog('⚠️ Please provide a passphrase', 'error');
+                throw new Error('No passphrase provided');
+            }
+
+            setIsUnprotecting(true);
+            addLog('Unprotecting key pair...', 'info');
+
+            const unprotectedKeyPair = await unprotect_keypair(protectedKeyPair, passphrase);
+            
+            addLog('✅ Key pair unprotected successfully', 'success');
+            return unprotectedKeyPair;
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            addLog(`❌ Key unprotection error: ${errorMessage}`, 'error');
+            console.error('Complete error:', error);
+            throw error;
+        } finally {
+            setIsUnprotecting(false);
+        }
+    }, [addLog]);
+
+    const protectMessageWithPassword = useCallback(async (message: string, passphrase: string) => {
+        try {
+            if (!message) {
+                addLog('⚠️ Please enter a message to protect', 'error');
+                throw new Error('No message to protect');
+            }
+
+            if (!passphrase) {
+                addLog('⚠️ Please provide a passphrase', 'error');
+                throw new Error('No passphrase provided');
+            }
+
+            setIsProtecting(true);
+            addLog('Protecting message with password...', 'info');
+
+            const protected_message = await protect_message(message, passphrase);
+            
+            addLog('✅ Message protected successfully with password', 'success');
+            return protected_message;
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            addLog(`❌ Message protection error: ${errorMessage}`, 'error');
+            console.error('Complete error:', error);
+            throw error;
+        } finally {
+            setIsProtecting(false);
+        }
+    }, [addLog]);
+
+    const unprotectMessageWithPassword = useCallback(async (
+        protectedMessage: ProtectedMessage, 
+        passphrase: string
+    ) => {
+        try {
+            if (!passphrase) {
+                addLog('⚠️ Please provide a passphrase', 'error');
+                throw new Error('No passphrase provided');
+            }
+
+            setIsUnprotecting(true);
+            addLog('Unprotecting message...', 'info');
+
+            const decrypted = await unprotect_message(
+                protectedMessage.ciphertext,
+                passphrase,
+                protectedMessage.salt,
+                protectedMessage.nonce
+            );
+            
+            addLog('✅ Message unprotected successfully', 'success');
+            return decrypted;
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            addLog(`❌ Message unprotection error: ${errorMessage}`, 'error');
+            console.error('Complete error:', error);
+            throw error;
+        } finally {
+            setIsUnprotecting(false);
+        }
+    }, [addLog]);
 
     const resetCrypto = useCallback(() => {
         setKeyPair(null);
@@ -258,9 +265,15 @@ export const useVaulticCrypto = () => {
         isGenerating,
         isEncrypting,
         isDecrypting,
+        isProtecting,
+        isUnprotecting,
         generateKeyPair,
         encryptMessage,
         decryptMessage,
+        protectKeyPair,
+        unprotectKeyPair,
+        protectMessageWithPassword,
+        unprotectMessageWithPassword,
         resetCrypto,
     };
 };

@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import { Search, Book, Compass } from 'lucide-react';
 
-const DOC_VERSION = '0.0.0'; // Version read from package.json
+const DOC_VERSION = '0.0.1'; // Version read from package.json
 
 // Content for search functionality with proper TypeScript indexing
 const contentData: Record<string, string> = {

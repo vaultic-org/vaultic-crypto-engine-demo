@@ -6,7 +6,7 @@
 [![Made with Vite](https://img.shields.io/badge/Vite-6.3-blue?logo=vite)](https://vitejs.dev)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/f1ef9f20-6acb-427c-a731-e044bf41579d/deploy-status)](https://app.netlify.com/projects/crypto-engine/deploys)
 
-Interactive demo application for [vaultic-crypto-engine](https://github.com/vaultic-org/vaultic-crypto-engine), showcasing browser-based cryptographic operations using WebAssembly.
+Interactive demo application for [@vaultic/crypto-engine](https://github.com/vaultic-org/vaultic-crypto-engine), showcasing browser-based cryptographic operations using WebAssembly.
 
 🔗 **Live Demo**: [crypto.vaultic.app](https://crypto.vaultic.app)
 
@@ -14,6 +14,8 @@ Interactive demo application for [vaultic-crypto-engine](https://github.com/vaul
 
 - Generates RSA 2048-bit key pairs (client-side, in-browser)
 - Encrypts and decrypts messages locally via WebAssembly
+- Auto-switches between direct RSA and hybrid RSA+AES encryption based on data size
+- Supports key pair and message protection with password-based encryption
 - Logs all steps and failures for educational/debugging purposes
 - Provides a user-friendly interface to test cryptographic operations
 
@@ -31,7 +33,7 @@ pnpm install
 pnpm run dev
 ```
 
-The demo app loads the local build of [vaultic-crypto-engine](https://github.com/vaultic-org/vaultic-crypto-engine).
+The demo app loads [@vaultic/crypto-engine](https://github.com/vaultic-org/vaultic-crypto-engine).
 
 ## 🔧 Tech Stack
 
@@ -47,25 +49,58 @@ The demo app loads the local build of [vaultic-crypto-engine](https://github.com
 ### Generate RSA Key Pair
 
 ```typescript
-import { generate_rsa_keypair_pem } from 'vaultic-crypto-engine';
+import { generate_rsa_keypair_pem } from '@vaultic/crypto-engine';
 
 const { public_pem, private_pem } = await generate_rsa_keypair_pem();
 ```
 
-### Encrypt a Message
+### Encrypt a Message (Hybrid Encryption Automatically Applied)
 
 ```typescript
-import { rsa_encrypt_base64 } from 'vaultic-crypto-engine';
+import { rsa_encrypt_base64 } from '@vaultic/crypto-engine';
 
+// Works with any message size - hybrid encryption is automatic
 const ciphertext = await rsa_encrypt_base64(publicKeyPem, message);
 ```
 
 ### Decrypt a Message
 
 ```typescript
-import { rsa_decrypt_base64 } from 'vaultic-crypto-engine';
+import { rsa_decrypt_base64 } from '@vaultic/crypto-engine';
 
+// Automatically detects and handles both direct RSA and hybrid encryption
 const plaintext = await rsa_decrypt_base64(privateKeyPem, encryptedMessage);
+```
+
+### Protect a Key Pair with Password
+
+```typescript
+import { protect_keypair, unprotect_keypair } from '@vaultic/crypto-engine';
+
+// Encrypt keys with a password
+const passphrase = "secure-password";
+const protectedKeys = await protect_keypair(privatePem, publicPem, passphrase);
+
+// Decrypt later with the same password
+const recoveredKeys = await unprotect_keypair(protectedKeys, passphrase);
+```
+
+### Protect a Message with Password
+
+```typescript
+import { protect_message, unprotect_message } from '@vaultic/crypto-engine';
+
+// Encrypt message with password
+const secretMessage = "Confidential information";
+const protectedMessage = await protect_message(secretMessage, passphrase);
+
+// Decrypt with the same password
+const decryptedMessage = await unprotect_message(
+  protectedMessage.ciphertext,
+  passphrase, 
+  protectedMessage.salt, 
+  protectedMessage.nonce
+);
 ```
 
 ## 🔍 Project Structure
