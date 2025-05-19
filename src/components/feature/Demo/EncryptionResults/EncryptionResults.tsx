@@ -6,6 +6,7 @@ import { Card } from '@/components/common/Card';
 import { Copy, RefreshCw, CheckCircle, XCircle } from 'lucide-react';
 import { Tooltip } from '@/components/common/Tooltip';
 import { EncryptionResultsProps } from './EncryptionResults.types';
+import useTranslation from '@/hooks/useTranslation';
 
 export const EncryptionResults: FC<EncryptionResultsProps> = ({
   encryptedMessage,
@@ -14,6 +15,8 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
   onCopyEncrypted,
   isHybridEncryption = false,
 }) => {
+  const { t } = useTranslation(['demo', 'common']);
+  
   if (!encryptedMessage) return null;
   
   const isVerified = decryptedMessage && originalMessage && decryptedMessage === originalMessage;
@@ -30,10 +33,10 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
           <div className="p-2 rounded-full bg-blue-500/10 mr-3">
             <RefreshCw className="w-5 h-5 text-blue-400" />
           </div>
-          <h2 className="text-xl font-semibold">Encryption Results</h2>
+          <h2 className="text-xl font-semibold">{t('encryption.result', { ns: 'demo' })}</h2>
           {isHybridEncryption && (
             <span className="ml-2 px-2 py-0.5 text-xs font-semibold bg-blue-900/30 text-blue-400 rounded-full border border-blue-800">
-              Hybrid RSA+AES
+              {t('encryption.hybrid', { ns: 'demo' })}
             </span>
           )}
         </div>
@@ -43,16 +46,16 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between mb-1">
               <label className="block text-sm font-medium text-gray-300">
-                Encrypted Message:
+                {t('encryption.result', { ns: 'demo' })}:
               </label>
-              <Tooltip content="Copy encrypted message">
+              <Tooltip content={t('copy', { ns: 'common' })}>
                 <Button
                   onClick={onCopyEncrypted}
                   variant="outline"
                   size="sm"
                   className="text-gray-300 hover:text-white border border-blue-700 hover:bg-blue-700/30"
                 >
-                  <Copy className="w-3.5 h-3.5 mr-1" /> Copy encrypted message
+                  <Copy className="w-3.5 h-3.5 mr-1" /> {t('copy', { ns: 'common' })}
                 </Button>
               </Tooltip>
             </div>
@@ -68,12 +71,12 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
               {isHybridEncryption ? (
                 <>
                   <span className="text-blue-400 mr-1">•</span>
-                  Using Vaultic's hybrid RSA+AES encryption for large data
+                  {t('encryption.usingHybrid', { ns: 'demo' })}
                 </>
               ) : (
                 <>
                   <span className="text-green-400 mr-1">•</span>
-                  Using direct RSA encryption
+                  {t('encryption.usingDirect', { ns: 'demo' })}
                 </>
               )}
             </div>
@@ -82,7 +85,7 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
           {/* Decrypted Message */}
           <div className="space-y-2">
             <label className="block text-sm font-medium mb-1 text-gray-300">
-              Decrypted Message:
+              {t('decryption.result', { ns: 'demo' })}:
             </label>
             <Textarea
               value={decryptedMessage}
@@ -90,7 +93,7 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
               className={`font-mono text-base bg-gray-800/50 border-gray-700 focus:border-blue-600 ${
                 hasDecrypted ? "" : "text-gray-500 italic"
               }`}
-              placeholder="Decrypted message will appear here..."
+              placeholder={t('decryption.result', { ns: 'demo' })}
               rows={3}
             />
           </div>
@@ -116,13 +119,13 @@ export const EncryptionResults: FC<EncryptionResultsProps> = ({
                 <div>
                   <p className="font-medium">
                     {isVerified
-                      ? "Verification successful!"
-                      : "Verification failed!"}
+                      ? t('decryption.success', 'Vérification réussie !', { ns: 'demo' })
+                      : t('decryption.error', 'Échec de la vérification !', { ns: 'demo' })}
                   </p>
                   <p className="text-sm opacity-80">
                     {isVerified
-                      ? "The decrypted message matches the original. The encryption/decryption cycle is complete and verified."
-                      : "The decrypted message differs from the original input."}
+                      ? t('decryption.matchMessage', 'Le message déchiffré correspond à l\'original. Le cycle de chiffrement/déchiffrement est complet et vérifié.', { ns: 'demo' })
+                      : t('decryption.mismatchMessage', 'Le message déchiffré diffère de l\'entrée originale.', { ns: 'demo' })}
                   </p>
                 </div>
               </div>

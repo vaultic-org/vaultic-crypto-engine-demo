@@ -1,7 +1,8 @@
 import { useState, useMemo, useRef } from 'react';
 import { Search, Book, Compass } from 'lucide-react';
+import useTranslation from '@/hooks/useTranslation';
 
-const DOC_VERSION = '0.0.1'; // Version read from package.json
+const DOC_VERSION = '^0.1.5'; // Version read from package.json
 
 // Content for search functionality with proper TypeScript indexing
 const contentData: Record<string, string> = {
@@ -12,29 +13,30 @@ const contentData: Record<string, string> = {
   'security': 'best practices security guidelines recommendations secure usage encryption standards compliance OWASP'
 };
 
-const sections = [
-  {
-    title: 'INTRODUCTION',
-    icon: <Book className="w-4 h-4 mr-1 text-gray-400" />,
-    links: [
-      { label: 'Getting Started', id: 'getting-started', badge: 'JS' },
-      { label: 'Installation', id: 'installation', badge: 'JS' },
-    ],
-  },
-  {
-    title: 'GUIDES',
-    icon: <Compass className="w-4 h-4 mr-1 text-gray-400" />,
-    links: [
-      { label: 'Usage', id: 'usage', badge: 'TS' },
-      { label: 'API', id: 'api', badge: 'TS' },
-      { label: 'Security', id: 'security', badge: 'TS' },
-    ],
-  },
-];
-
 export default function Sidebar({ activeId, onNavigate }: { activeId: string, onNavigate: (id: string) => void }) {
   const [search, setSearch] = useState('');
   const firstResultRef = useRef<HTMLAnchorElement>(null);
+  const { t } = useTranslation(['documentation', 'common']);
+
+  const sections = useMemo(() => [
+    {
+      title: t('documentation:sidebar.introduction'),
+      icon: <Book className="w-4 h-4 mr-1 text-gray-400" />,
+      links: [
+        { label: t('documentation:sidebar.gettingStarted'), id: 'getting-started', badge: 'JS' },
+        { label: t('documentation:sidebar.installation'), id: 'installation', badge: 'JS' },
+      ],
+    },
+    {
+      title: t('documentation:sidebar.guides'),
+      icon: <Compass className="w-4 h-4 mr-1 text-gray-400" />,
+      links: [
+        { label: t('documentation:sidebar.usage'), id: 'usage', badge: 'TS' },
+        { label: t('documentation:sidebar.api'), id: 'api', badge: 'TS' },
+        { label: t('documentation:sidebar.security'), id: 'security', badge: 'TS' },
+      ],
+    },
+  ], [t]);
 
   const filteredSections = useMemo(() => {
     if (!search.trim()) return sections;
@@ -51,7 +53,7 @@ export default function Sidebar({ activeId, onNavigate }: { activeId: string, on
         ),
       }))
       .filter(section => section.links.length > 0);
-  }, [search]);
+  }, [search, sections]);
 
   // Focus on first result when pressing Enter in search bar
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,19 +78,19 @@ export default function Sidebar({ activeId, onNavigate }: { activeId: string, on
         <div className="relative mt-2">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder={t('documentation:sidebar.search')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             className="w-full pl-9 pr-3 py-2 rounded-lg bg-gray-800 text-gray-200 placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-            aria-label="Search in documentation"
+            aria-label={t('documentation:sidebar.searchAria')}
           />
           <Search className="absolute left-2 top-2.5 w-4 h-4 text-gray-500" />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto pr-1">
         {filteredSections.length === 0 && (
-          <div className="text-gray-500 text-sm px-3 py-6 text-center select-none">No results found</div>
+          <div className="text-gray-500 text-sm px-3 py-6 text-center select-none">{t('documentation:sidebar.noResults')}</div>
         )}
         {filteredSections.map(section => (
           <div key={section.title} className="mb-6">

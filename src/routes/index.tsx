@@ -6,8 +6,11 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { Button } from "@/components/common/Button";
+import useTranslation from "@/hooks/useTranslation";
 
 const Home = () => {
+  const { t } = useTranslation(['common', 'home']);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />
@@ -35,7 +38,7 @@ const Home = () => {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="px-4 py-1.5 mb-4 text-xs font-semibold rounded-full glossy-card text-blue-400 shadow-md w-max"
               >
-                Secure. Fast. Open Source.
+                {t('hero.secure', { ns: 'home' })}
               </motion.span>
 
               <motion.h1
@@ -44,7 +47,7 @@ const Home = () => {
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="text-5xl md:text-7xl font-extrabold mb-6 gradient-text tracking-tight leading-none"
               >
-                Vaultic Crypto Engine
+                {t('app.name', { ns: 'common' })}
               </motion.h1>
 
               <motion.p
@@ -53,10 +56,9 @@ const Home = () => {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed"
               >
-                Enterprise-grade cryptographic library for secure RSA
-                operations.
+                {t('hero.subtitle', { ns: 'home' })}
                 <span className="block mt-2 text-blue-400">
-                  Built for performance, designed for security.
+                  {t('footer.slogan', { ns: 'common' })}
                 </span>
               </motion.p>
 
@@ -73,7 +75,7 @@ const Home = () => {
                   size="lg"
                   className="glossy-button group"
                 >
-                  Try Interactive Demo
+                  {t('hero.ctaDemo', { ns: 'home' })}
                   <i className="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </Button>
 
@@ -85,7 +87,7 @@ const Home = () => {
                   className="glossy-button"
                 >
                   <i className="fas fa-book mr-2"></i>
-                  Documentation
+                  {t('nav.documentation', { ns: 'common' })}
                 </Button>
               </motion.div>
             </motion.div>
@@ -108,7 +110,7 @@ const Home = () => {
                 transition={{ duration: 0.5 }}
                 className="text-4xl md:text-5xl font-bold mb-4 gradient-text tracking-tight"
               >
-                Simple to Use, Powerful by Design
+                {t('features.title', { ns: 'home' })}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -116,8 +118,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-xl text-gray-300 max-w-3xl mx-auto"
               >
-                Implement enterprise-grade encryption in minutes with our
-                intuitive API
+                {t('features.subtitle', { ns: 'home' })}
               </motion.p>
             </div>
 
@@ -135,10 +136,10 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        Military-Grade Security
+                        {t('features.security.title', { ns: 'home' })}
                       </h3>
                       <p className="text-gray-400">
-                        RSA-2048 encryption with timing attack protection and Vaultic's advanced hybrid RSA+AES encryption for any data size.
+                        {t('features.security.description', { ns: 'home' })}
                       </p>
                     </div>
                   </div>
@@ -156,11 +157,10 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        Optimized Performance
+                        {t('features.performance.title', { ns: 'home' })}
                       </h3>
                       <p className="text-gray-400">
-                        Native Rust and WebAssembly support for maximum speed
-                        across all platforms.
+                        {t('features.performance.description', { ns: 'home' })}
                       </p>
                     </div>
                   </div>
@@ -178,11 +178,10 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        Developer Experience
+                        {t('features.developer.title', { ns: 'home' })}
                       </h3>
                       <p className="text-gray-400">
-                        Simple API with automatic handling of data size and
-                        comprehensive documentation.
+                        {t('features.developer.description', { ns: 'home' })}
                       </p>
                     </div>
                   </div>
@@ -200,10 +199,10 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        Vaultic Hybrid Technology
+                        {t('features.compatibility.title', { ns: 'home' })}
                       </h3>
                       <p className="text-gray-400">
-                        Automatically switches between direct RSA and hybrid RSA+AES encryption for seamless handling of any data size.
+                        {t('features.compatibility.description', { ns: 'home' })}
                       </p>
                     </div>
                   </div>
@@ -238,7 +237,7 @@ import {
   generate_rsa_keypair_pem,
   rsa_encrypt_base64,
   rsa_decrypt_base64
-} from "vaultic-crypto-engine";
+} from "@vaultic/crypto-engine";
 
 // Generate a key pair
 const keypair = await generate_rsa_keypair_pem();
@@ -274,11 +273,10 @@ console.log(decrypted); // "Secret message with sensitive information"
           <div className="cta-wow-bg"></div>
           <div className="container mx-auto px-6 relative z-10 text-center">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 cta-wow-title tracking-tight">
-              Ready to Enhance Your App's Security?
+              {t('cta.title', { ns: 'home' })}
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-              Get started with <span className="gradient-text font-bold">Vaultic Crypto Engine</span> today and implement
-              enterprise-grade encryption in minutes.
+              {t('cta.description', { ns: 'home' })} <span className="gradient-text font-bold">{t('app.name', { ns: 'common' })}</span> {t('cta.descriptionEnd', { ns: 'home' })}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -291,10 +289,10 @@ console.log(decrypted); // "Secret message with sensitive information"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-github mr-2"></i>
-                View on GitHub
+                {t('cta.github', { ns: 'home' })}
               </Button>
               <Button as={Link} to="/demo" variant="outline" size="lg" className="cta-wow-btn">
-                Try the Demo
+                {t('cta.tryDemo', { ns: 'home' })}
               </Button>
             </div>
           </div>
@@ -309,3 +307,5 @@ console.log(decrypted); // "Secret message with sensitive information"
 export const Route = createFileRoute("/")({
   component: Home,
 });
+
+export default Home;

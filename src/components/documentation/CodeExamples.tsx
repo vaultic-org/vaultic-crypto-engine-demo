@@ -4,6 +4,7 @@ import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useLogStore } from '@/core/store/logStore';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import useTranslation from '@/hooks/useTranslation';
 
 interface CodeExamplesProps {
   language: string;
@@ -16,10 +17,11 @@ const CodeExamples = ({ language, title, code, badge }: CodeExamplesProps) => {
   const [showCode, setShowCode] = useState(true);
   const { copyToClipboard } = useCopyToClipboard();
   const addLog = useLogStore(state => state.addLog);
+  const { t } = useTranslation(['documentation', 'common']);
   
   const handleCopyCode = () => {
-    copyToClipboard(code, 'Code copied to clipboard!');
-    addLog('Example code copied to clipboard', 'info');
+    copyToClipboard(code, t('documentation:codeExample.copied'));
+    addLog(t('documentation:codeExample.logCopied'), 'info');
   };
   
   return (
@@ -32,7 +34,7 @@ const CodeExamples = ({ language, title, code, badge }: CodeExamplesProps) => {
             variant="ghost"
             size="sm"
           >
-            <i className="fas fa-copy mr-1"></i> Copy
+            <i className="fas fa-copy mr-1"></i> {t('common:copy')}
           </Button>
           <Button
             onClick={() => setShowCode(!showCode)}
@@ -41,11 +43,11 @@ const CodeExamples = ({ language, title, code, badge }: CodeExamplesProps) => {
           >
             {showCode ? (
               <>
-                <i className="fas fa-eye-slash mr-1"></i> Hide
+                <i className="fas fa-eye-slash mr-1"></i> {t('documentation:codeExample.hide')}
               </>
             ) : (
               <>
-                <i className="fas fa-eye mr-1"></i> Show
+                <i className="fas fa-eye mr-1"></i> {t('documentation:codeExample.show')}
               </>
             )}
           </Button>
@@ -57,7 +59,7 @@ const CodeExamples = ({ language, title, code, badge }: CodeExamplesProps) => {
           <button
             className="absolute top-2 right-2 text-xs text-gray-400 hover:text-blue-400 focus:outline-none"
             onClick={handleCopyCode}
-            aria-label="Copy code"
+            aria-label={t('common:copy')}
           >
             {/* Placeholder for the copied state */}
           </button>

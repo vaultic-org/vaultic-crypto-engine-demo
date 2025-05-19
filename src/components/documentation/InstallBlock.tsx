@@ -2,21 +2,23 @@ import { useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useLogStore } from '@/core/store/logStore';
+import useTranslation from '@/hooks/useTranslation';
 
 const InstallBlock = () => {
   const [activeTab, setActiveTab] = useState<'npm' | 'yarn' | 'pnpm'>('npm');
   const { copyToClipboard } = useCopyToClipboard();
   const addLog = useLogStore(state => state.addLog);
+  const { t } = useTranslation(['documentation', 'common']);
 
   const installCommands = {
-    npm: 'npm install vaultic-crypto-engine',
-    yarn: 'yarn add vaultic-crypto-engine',
-    pnpm: 'pnpm add vaultic-crypto-engine'
+    npm: 'npm install @vaultic/crypto-engine',
+    yarn: 'yarn add @vaultic/crypto-engine',
+    pnpm: 'pnpm add @vaultic/crypto-engine'
   };
 
   const handleCopyCommand = () => {
-    copyToClipboard(installCommands[activeTab], 'Install command copied to clipboard!');
-    addLog('Install command copied to clipboard', 'info');
+    copyToClipboard(installCommands[activeTab], t('documentation:codeExample.copied'));
+    addLog(t('documentation:installation.logCopied'), 'info');
   };
 
   return (
@@ -58,7 +60,7 @@ const InstallBlock = () => {
             size="sm"
             className="text-gray-400 hover:text-white"
           >
-            <i className="fas fa-copy mr-1"></i> Copy
+            <i className="fas fa-copy mr-1"></i> {t('common:copy')}
           </Button>
         </div>
         <pre className="p-4 overflow-x-auto">
@@ -67,7 +69,7 @@ const InstallBlock = () => {
       </div>
 
       <div className="mt-4 text-sm text-gray-400">
-        <p>To use with TypeScript, no additional configuration is required. The types are included in the package.</p>
+        <p>{t('documentation:installation.typescriptNote')}</p>
       </div>
     </div>
   );

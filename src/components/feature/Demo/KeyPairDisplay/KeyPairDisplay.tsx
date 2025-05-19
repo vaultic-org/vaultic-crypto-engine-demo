@@ -6,12 +6,15 @@ import { Card } from '@/components/common/Card';
 import { Copy, Key, Shield, LockKeyhole } from 'lucide-react';
 import { Tooltip } from '@/components/common/Tooltip';
 import { KeyPairDisplayProps } from './KeyPairDisplay.types';
+import useTranslation from '@/hooks/useTranslation';
 
 export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
   keyPair,
   onCopyPublicKey,
   onCopyPrivateKey,
 }) => {
+  const { t } = useTranslation(['demo', 'common']);
+  
   if (!keyPair) return null;
 
   return (
@@ -39,23 +42,23 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
                 <div className="flex items-center">
                   <Shield className="w-4 h-4 text-green-400 mr-2" />
                   <label className="block text-sm font-medium text-gray-300">
-                    Public Key (for encryption):
+                    {t('keyGeneration.publicKeyLabel', { ns: 'demo' })}
                   </label>
                   <div className="relative inline-block ml-2">
-                    <Tooltip content="Anyone can use this key to encrypt messages that only you can decrypt" position="bottom">
+                    <Tooltip content={t('keyGeneration.publicKeyTooltip', { ns: 'demo' })} position="bottom">
                       <span className="inline-flex items-center justify-center w-4 h-4 text-xs bg-gray-700 text-gray-300 rounded-full cursor-help">?</span>
                     </Tooltip>
                   </div>
                 </div>
                 <div className="ml-4">
-                  <Tooltip content="Copy public key">
+                  <Tooltip content={t('copy', { ns: 'common' })}>
                     <Button
                       onClick={onCopyPublicKey}
                       variant="ghost"
                       size="sm"
                       className="text-gray-400 hover:text-white border border-gray-700"
                     >
-                      <Copy className="w-3.5 h-3.5 mr-1" /> Copy
+                      <Copy className="w-3.5 h-3.5 mr-1" /> {t('copy', { ns: 'common' })}
                     </Button>
                   </Tooltip>
                 </div>
@@ -68,7 +71,7 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
                 />
               </div>
               <div className="text-xs text-gray-500">
-                2048-bit RSA Public Key ({keyPair.public_pem.length} chars)
+                {t('keyGeneration.publicKeyInfo', { count: keyPair.public_pem.length, ns: 'demo' })}
               </div>
             </div>
 
@@ -78,23 +81,23 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
                 <div className="flex items-center">
                   <LockKeyhole className="w-4 h-4 text-amber-400 mr-2" />
                   <label className="block text-sm font-medium text-gray-300">
-                    Private Key (for decryption):
+                    {t('keyGeneration.privateKeyLabel', { ns: 'demo' })}
                   </label>
                   <div className="relative inline-block ml-2">
-                    <Tooltip content="Keep this key secret! It's used to decrypt messages" position="bottom">
+                    <Tooltip content={t('keyGeneration.privateKeyTooltip', { ns: 'demo' })} position="bottom">
                       <span className="inline-flex items-center justify-center w-4 h-4 text-xs bg-amber-900 text-amber-300 rounded-full cursor-help">!</span>
                     </Tooltip>
                   </div>
                 </div>
                 <div className="ml-4">
-                  <Tooltip content="Copy private key">
+                  <Tooltip content={t('copy', { ns: 'common' })}>
                     <Button
                       onClick={onCopyPrivateKey}
                       variant="ghost"
                       size="sm"
                       className="text-gray-400 hover:text-white border border-gray-700"
                     >
-                      <Copy className="w-3.5 h-3.5 mr-1" /> Copy
+                      <Copy className="w-3.5 h-3.5 mr-1" /> {t('copy', { ns: 'common' })}
                     </Button>
                   </Tooltip>
                 </div>
@@ -108,7 +111,7 @@ export const KeyPairDisplay: FC<KeyPairDisplayProps> = ({
               </div>
               <div className="text-xs text-gray-500 flex items-center">
                 <span className="text-amber-400 mr-1">•</span>
-                Keep this key secure - never share your private key
+                {t('keyGeneration.privateKeyInfo', { ns: 'demo' })}
               </div>
             </div>
           </div>

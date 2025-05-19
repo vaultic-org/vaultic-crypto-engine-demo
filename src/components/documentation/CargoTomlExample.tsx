@@ -1,6 +1,7 @@
 import { Button } from '@/components/common/Button';
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { useLogStore } from '@/core/store/logStore';
+import useTranslation from '@/hooks/useTranslation';
 
 interface CargoTomlExampleProps {
   title: string;
@@ -12,6 +13,7 @@ interface CargoTomlExampleProps {
 const CargoTomlExample = ({ title, packageName, version, features }: CargoTomlExampleProps) => {
   const { copyToClipboard } = useCopyToClipboard();
   const addLog = useLogStore(state => state.addLog);
+  const { t } = useTranslation(['documentation', 'common']);
 
   const getCodeContent = () => {
     if (features && features.length > 0) {
@@ -21,8 +23,8 @@ const CargoTomlExample = ({ title, packageName, version, features }: CargoTomlEx
   };
   
   const handleCopyCode = () => {
-    copyToClipboard(getCodeContent(), 'Code copied to clipboard!');
-    addLog('Cargo.toml code copied to clipboard', 'info');
+    copyToClipboard(getCodeContent(), t('documentation:codeExample.copied'));
+    addLog(t('documentation:cargoToml.logCopied'), 'info');
   };
   
   // Préparer le contenu à afficher
@@ -39,7 +41,7 @@ const CargoTomlExample = ({ title, packageName, version, features }: CargoTomlEx
           variant="ghost"
           size="sm"
         >
-          <i className="fas fa-copy mr-1"></i> Copy
+          <i className="fas fa-copy mr-1"></i> {t('common:copy')}
         </Button>
       </div>
       

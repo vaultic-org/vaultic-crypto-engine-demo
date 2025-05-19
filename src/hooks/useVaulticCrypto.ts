@@ -10,6 +10,7 @@ import {
     unprotect_message
 } from '@vaultic/crypto-engine';
 import { KeyPair, ProtectedKeyPair, ProtectedMessage } from '@/core/types/crypto.types';
+import useTranslation from './useTranslation';
 
 /**
  * Custom hook to provide Vaultic cryptography functionality
@@ -25,128 +26,130 @@ export const useVaulticCrypto = () => {
     const [isProtecting, setIsProtecting] = useState(false);
     const [isUnprotecting, setIsUnprotecting] = useState(false);
 
+    const { t } = useTranslation(['demo', 'common']);
     const addLog = useLogStore(state => state.addLog);
 
     const generateKeyPair = useCallback(async () => {
         try {
             setIsGenerating(true);
-            addLog('Initializing Vaultic crypto engine...', 'info');
-            addLog('Generating RSA 2048-bit key pair with secure entropy...', 'info');
+            addLog(t('demo:systemLogs.initializing'), 'info');
+            addLog(t('demo:systemLogs.generatingKeyPair'), 'info');
 
             // Generate the key pair
             const newKeyPair = await generate_rsa_keypair_pem();
             setKeyPair(newKeyPair);
 
-            addLog(`Vaultic RSA public key generated (${newKeyPair.public_pem.length} chars)`, 'info');
-            addLog(`Vaultic RSA private key generated (${newKeyPair.private_pem.length} chars)`, 'info');
-            addLog('Key pairs include Vaultic\'s additional Marvin attack protections', 'info');
-            addLog('✅ Vaultic RSA key pair successfully generated!', 'success');
+            addLog(t('demo:systemLogs.publicKeyGenerated', { length: newKeyPair.public_pem.length }), 'info');
+            addLog(t('demo:systemLogs.privateKeyGenerated', { length: newKeyPair.private_pem.length }), 'info');
+            addLog(t('demo:systemLogs.keyPairProtection'), 'info');
+            addLog(t('demo:systemLogs.keyPairSuccess'), 'success');
 
             return newKeyPair;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Error in Vaultic key generation: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.keyGenError', { error: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsGenerating(false);
         }
-    }, [addLog]);
+    }, [addLog, t]);
 
     const encryptMessage = useCallback(async (message: string, publicKey?: string) => {
         try {
             if (!message) {
-                addLog('⚠️ Please enter a message to encrypt', 'error');
-                throw new Error('No message to encrypt');
+                addLog(t('demo:systemLogs.noMessageError'), 'error');
+                throw new Error(t('demo:errors.noMessageToEncrypt'));
             }
 
             const publicKeyToUse = publicKey || keyPair?.public_pem;
 
             if (!publicKeyToUse) {
-                addLog('⚠️ Please generate a Vaultic RSA key pair first', 'error');
-                throw new Error('No public key available');
+                addLog(t('demo:systemLogs.noKeyPairError'), 'error');
+                throw new Error(t('demo:errors.noPublicKey'));
             }
 
             setIsEncrypting(true);
-            addLog(`Vaultic engine encrypting message (${message.length} bytes)...`, 'info');
+            addLog(t('demo:systemLogs.encryptingMessage', { bytes: message.length }), 'info');
 
             // The library now automatically handles hybrid encryption
             const encrypted = await rsa_encrypt_base64(publicKeyToUse, message);
             setEncryptedMessage(encrypted);
 
-            addLog('✅ Message encrypted successfully', 'success');
+            addLog(t('demo:systemLogs.encryptSuccess'), 'success');
             // Hybrid encryption is now automatic based on message size
             if (message.length > 190) {
-                addLog('Large data automatically handled with hybrid RSA+AES encryption', 'info');
+                addLog(t('demo:systemLogs.hybridNotice'), 'info');
             }
-            addLog('The message can now only be decrypted with the matching private key', 'info');
+            addLog(t('demo:systemLogs.privateKeyOnly'), 'info');
 
             return encrypted;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Vaultic encryption error: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.encryptError', { message: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsEncrypting(false);
         }
-    }, [keyPair, addLog]);
+    }, [keyPair, addLog, t]);
 
     const decryptMessage = useCallback(async (encryptedData: string, privateKey?: string) => {
         try {
             if (!encryptedData) {
-                addLog('⚠️ No encrypted message to decrypt', 'error');
-                throw new Error('No encrypted message to decrypt');
+                addLog(t('demo:systemLogs.noEncryptedMessage'), 'error');
+                throw new Error(t('demo:errors.noEncryptedMessage'));
             }
 
             const privateKeyToUse = privateKey || keyPair?.private_pem;
 
             if (!privateKeyToUse) {
-                addLog('⚠️ Please generate a Vaultic RSA key pair first', 'error');
-                throw new Error('No private key available');
+                addLog(t('demo:systemLogs.noKeyPairError'), 'error');
+                throw new Error(t('demo:errors.noPrivateKey'));
             }
 
             setIsDecrypting(true);
-            addLog('Vaultic engine decrypting message...', 'info');
+            addLog(t('demo:systemLogs.decryptingMessage'), 'info');
 
             try {
                 // The library now automatically detects the encryption method
                 const decrypted = await rsa_decrypt_base64(privateKeyToUse, encryptedData);
                 setDecryptedMessage(decrypted);
-                addLog('✅ Vaultic decryption successful', 'success');
+                addLog(t('demo:systemLogs.decryptSuccess'), 'success');
 
                 return decrypted;
             } catch (decryptError) {
-                addLog(`❌ Vaultic decryption failed: ${decryptError instanceof Error ? decryptError.message : 'Unknown error'}`, 'error');
-                addLog('This could be due to data corruption or using the wrong private key', 'error');
+                const errorMsg = decryptError instanceof Error ? decryptError.message : t('common:error.unknown');
+                addLog(t('demo:systemLogs.decryptError', { message: errorMsg }), 'error');
+                addLog(t('demo:systemLogs.wrongKeyError'), 'error');
                 console.error('Decryption error details:', decryptError);
                 throw decryptError;
             }
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Vaultic engine error: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.engineError', { message: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsDecrypting(false);
         }
-    }, [keyPair, addLog]);
+    }, [keyPair, addLog, t]);
 
     const protectKeyPair = useCallback(async (passphrase: string, keyPairToProtect?: KeyPair) => {
         try {
             const keyPairToUse = keyPairToProtect || keyPair;
             if (!keyPairToUse) {
-                addLog('⚠️ No key pair available to protect', 'error');
-                throw new Error('No key pair available');
+                addLog(t('demo:systemLogs.noKeyToProtect'), 'error');
+                throw new Error(t('demo:errors.noKeyPairAvailable'));
             }
 
             if (!passphrase) {
-                addLog('⚠️ Please provide a passphrase', 'error');
-                throw new Error('No passphrase provided');
+                addLog(t('demo:systemLogs.noPassphrase'), 'error');
+                throw new Error(t('demo:errors.noPassphrase'));
             }
 
             setIsProtecting(true);
-            addLog('Protecting key pair with password...', 'info');
+            addLog(t('demo:systemLogs.protectingKeyPair'), 'info');
 
             const protectedKeys = await protect_keypair(
                 keyPairToUse.private_pem,
@@ -154,70 +157,70 @@ export const useVaulticCrypto = () => {
                 passphrase
             );
 
-            addLog('✅ Key pair protected successfully', 'success');
+            addLog(t('demo:systemLogs.keyPairProtected'), 'success');
             return protectedKeys;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Key protection error: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.keyProtectionError', { message: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsProtecting(false);
         }
-    }, [keyPair, addLog]);
+    }, [keyPair, addLog, t]);
 
     const unprotectKeyPair = useCallback(async (protectedKeyPair: ProtectedKeyPair, passphrase: string) => {
         try {
             if (!passphrase) {
-                addLog('⚠️ Please provide a passphrase', 'error');
-                throw new Error('No passphrase provided');
+                addLog(t('demo:systemLogs.noPassphrase'), 'error');
+                throw new Error(t('demo:errors.noPassphrase'));
             }
 
             setIsUnprotecting(true);
-            addLog('Unprotecting key pair...', 'info');
+            addLog(t('demo:systemLogs.unprotectingKeyPair'), 'info');
 
             const unprotectedKeyPair = await unprotect_keypair(protectedKeyPair, passphrase);
             
-            addLog('✅ Key pair unprotected successfully', 'success');
+            addLog(t('demo:systemLogs.keyPairUnprotected'), 'success');
             return unprotectedKeyPair;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Key unprotection error: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.keyUnprotectionError', { message: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsUnprotecting(false);
         }
-    }, [addLog]);
+    }, [addLog, t]);
 
     const protectMessageWithPassword = useCallback(async (message: string, passphrase: string) => {
         try {
             if (!message) {
-                addLog('⚠️ Please enter a message to protect', 'error');
-                throw new Error('No message to protect');
+                addLog(t('demo:systemLogs.noMessageToProtect'), 'error');
+                throw new Error(t('demo:errors.noMessageToProtect'));
             }
 
             if (!passphrase) {
-                addLog('⚠️ Please provide a passphrase', 'error');
-                throw new Error('No passphrase provided');
+                addLog(t('demo:systemLogs.noPassphrase'), 'error');
+                throw new Error(t('demo:errors.noPassphrase'));
             }
 
             setIsProtecting(true);
-            addLog('Protecting message with password...', 'info');
+            addLog(t('demo:systemLogs.protectingMessage'), 'info');
 
             const protected_message = await protect_message(message, passphrase);
             
-            addLog('✅ Message protected successfully with password', 'success');
+            addLog(t('demo:systemLogs.messageProtected'), 'success');
             return protected_message;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Message protection error: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.messageProtectionError', { message: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsProtecting(false);
         }
-    }, [addLog]);
+    }, [addLog, t]);
 
     const unprotectMessageWithPassword = useCallback(async (
         protectedMessage: ProtectedMessage, 
@@ -225,12 +228,12 @@ export const useVaulticCrypto = () => {
     ) => {
         try {
             if (!passphrase) {
-                addLog('⚠️ Please provide a passphrase', 'error');
-                throw new Error('No passphrase provided');
+                addLog(t('demo:systemLogs.noPassphrase'), 'error');
+                throw new Error(t('demo:errors.noPassphrase'));
             }
 
             setIsUnprotecting(true);
-            addLog('Unprotecting message...', 'info');
+            addLog(t('demo:systemLogs.unprotectingMessage'), 'info');
 
             const decrypted = await unprotect_message(
                 protectedMessage.ciphertext,
@@ -239,24 +242,24 @@ export const useVaulticCrypto = () => {
                 protectedMessage.nonce
             );
             
-            addLog('✅ Message unprotected successfully', 'success');
+            addLog(t('demo:systemLogs.messageUnprotected'), 'success');
             return decrypted;
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            addLog(`❌ Message unprotection error: ${errorMessage}`, 'error');
+            const errorMessage = error instanceof Error ? error.message : t('common:error.unknown');
+            addLog(t('demo:systemLogs.messageUnprotectionError', { message: errorMessage }), 'error');
             console.error('Complete error:', error);
             throw error;
         } finally {
             setIsUnprotecting(false);
         }
-    }, [addLog]);
+    }, [addLog, t]);
 
     const resetCrypto = useCallback(() => {
         setKeyPair(null);
         setEncryptedMessage('');
         setDecryptedMessage('');
-        addLog('Vaultic demo reset. Ready for new encryption session.', 'info');
-    }, [addLog]);
+        addLog(t('demo:systemLogs.demoReset'), 'info');
+    }, [addLog, t]);
 
     return {
         keyPair,
@@ -274,6 +277,6 @@ export const useVaulticCrypto = () => {
         unprotectKeyPair,
         protectMessageWithPassword,
         unprotectMessageWithPassword,
-        resetCrypto,
+        resetCrypto
     };
 };

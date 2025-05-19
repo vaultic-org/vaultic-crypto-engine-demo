@@ -2,8 +2,11 @@ import { Link, useMatchRoute } from "@tanstack/react-router";
 import { Button } from "@/components/common/Button";
 import { ReactNode, useState } from "react";
 import { MoreVertical } from 'lucide-react';
+import useTranslation from "@/hooks/useTranslation";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
+  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Use the useMatchRoute hook to detect the active route
@@ -18,9 +21,10 @@ const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
           <div className="flex items-center gap-2">
             {childrenLeft}
             <Link to="/" className="text-xl font-bold text-white">
-              Vaultic
+              {t('app.name')}
             </Link>
           </div>
+          
           {/* Desktop links */}
           <div className="hidden md:flex items-center space-x-4">
             <Button 
@@ -30,7 +34,7 @@ const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
               size="sm"
               className={isDemoActive ? "bg-blue-900/40 text-blue-200 border-blue-600" : ""}
             >
-              Demo
+              {t('nav.demo')}
             </Button>
             <Button 
               as={Link} 
@@ -39,7 +43,7 @@ const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
               size="sm"
               className={isDocsActive ? "bg-blue-900/40 text-blue-200 border-blue-600" : ""}
             >
-              Documentation
+              {t('nav.documentation')}
             </Button>
             <a
               href="https://github.com/vaultic-org/vaultic-crypto-engine"
@@ -48,15 +52,16 @@ const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
               className="inline-flex items-center px-4 py-2 border border-gray-700 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:border-gray-600 transition-colors"
             >
               <i className="fab fa-github mr-2"></i>
-              GitHub
+              {t('nav.github')}
             </a>
+            <LanguageSwitcher />
           </div>
           {/* Mobile menu button */}
           <div className="md:hidden relative">
             <button
               className="inline-flex items-center justify-center bg-gray-800 rounded-lg p-2 border border-gray-700 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={() => setMobileMenuOpen(v => !v)}
-              aria-label="Open main menu"
+              aria-label={t('common.openMenu')}
             >
               <MoreVertical className="w-6 h-6 text-gray-200" />
             </button>
@@ -68,14 +73,14 @@ const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
                     className={`px-4 py-2 text-gray-200 hover:bg-gray-800 rounded transition-colors ${isDemoActive ? "bg-blue-900/40 text-blue-200 font-medium" : ""}`} 
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Demo
+                    {t('nav.demo')}
                   </Link>
                   <Link 
                     to="/documentation" 
                     className={`px-4 py-2 text-gray-200 hover:bg-gray-800 rounded transition-colors ${isDocsActive ? "bg-blue-900/40 text-blue-200 font-medium" : ""}`} 
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Documentation
+                    {t('nav.documentation')}
                   </Link>
                   <a
                     href="https://github.com/vaultic-org/vaultic-crypto-engine"
@@ -85,8 +90,11 @@ const Navbar = ({ childrenLeft }: { childrenLeft?: ReactNode }) => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <i className="fab fa-github mr-2"></i>
-                    GitHub
+                    {t('nav.github')}
                   </a>
+                  <div className="px-2 py-1">
+                    <LanguageSwitcher />
+                  </div>
                 </div>
               </div>
             )}

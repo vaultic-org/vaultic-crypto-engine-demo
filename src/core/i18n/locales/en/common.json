@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "Vaultic Crypto Engine",
+    "tagline": "Advanced cryptographic library for JavaScript & TypeScript"
+  },
+  "nav": {
+    "home": "Home",
+    "demo": "Demo",
+    "documentation": "Documentation",
+    "github": "GitHub"
+  },
+  "language": {
+    "en": "English",
+    "fr": "French",
+    "select": "Select language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "reset": "Reset",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "close": "Close",
+    "generate": "Generate",
+    "encrypt": "Encrypt",
+    "decrypt": "Decrypt",
+    "protect": "Protect",
+    "unprotect": "Unprotect",
+    "back": "Back",
+    "next": "Next",
+    "openMenu": "Open main menu"
+  },
+  "footer": {
+    "copyright": "© {{year}} Vaultic Org. All rights reserved.",
+    "license": "MIT License",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "resources": "Resources",
+    "legal": "Legal",
+    "githubRepo": "GitHub Repository",
+    "npmPackage": "NPM Package",
+    "releaseNotes": "Release Notes",
+    "slogan": "Built for performance, designed for security."
+  },
+  "documentation": {
+    "gettingStarted": "Getting Started",
+    "installation": {
+      "title": "Installation"
+    },
+    "api": {
+      "title": "API Reference"
+    },
+    "usageExamples": {
+      "title": "Usage Examples"
+    }
+  }
+} 

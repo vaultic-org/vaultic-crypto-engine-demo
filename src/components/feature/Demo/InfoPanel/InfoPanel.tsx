@@ -4,26 +4,29 @@ import { Card } from '@/components/common/Card';
 import { BookOpen, Lock, ShieldCheck, ArrowRight, Code } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { InfoStep } from './InfoPanel.types';
-
-const infoSteps: InfoStep[] = [
-  {
-    title: 'Generate RSA Key Pair',
-    description: 'Creates a 2048-bit RSA key pair with secure random entropy',
-    icon: ShieldCheck,
-  },
-  {
-    title: 'Auto-detect Message Size',
-    description: 'Messages > 245 bytes use hybrid RSA+AES encryption',
-    icon: Code,
-  },
-  {
-    title: 'Secure Encryption',
-    description: 'Encrypts with RSA or hybrid RSA+AES for large messages',
-    icon: Lock,
-  },
-];
+import useTranslation from '@/hooks/useTranslation';
 
 export const InfoPanel: FC = () => {
+  const { t } = useTranslation(['demo', 'common']);
+
+  const infoSteps: InfoStep[] = [
+    {
+      title: t('keyGeneration.title', { ns: 'demo' }),
+      description: t('keyGeneration.description', { ns: 'demo' }),
+      icon: ShieldCheck,
+    },
+    {
+      title: t('encryption.title', { ns: 'demo' }),
+      description: t('encryption.hybrid', { ns: 'demo' }),
+      icon: Code,
+    },
+    {
+      title: t('security.title', { ns: 'demo' }),
+      description: t('security.description', { ns: 'demo' }),
+      icon: Lock,
+    },
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -36,12 +39,12 @@ export const InfoPanel: FC = () => {
           <div className="p-2 rounded-full bg-blue-500/10 mr-3">
             <BookOpen className="w-5 h-5 text-blue-400" />
           </div>
-          <h2 className="text-xl font-semibold">How Vaultic Crypto Works</h2>
+          <h2 className="text-xl font-semibold">{t('howItWorks', { ns: 'demo' })}</h2>
         </div>
         
         <div className="space-y-6">
           <div className="text-sm text-gray-300">
-            This demo showcases Vaultic's enterprise-grade RSA encryption engine with automatic hybrid RSA+AES capabilities for any message size.
+            {t('description', { ns: 'demo' })}
           </div>
           
           <div className="space-y-4">
@@ -76,7 +79,7 @@ export const InfoPanel: FC = () => {
                 to="/documentation" 
                 className="inline-flex items-center text-sm text-blue-400 hover:text-blue-300 font-medium"
               >
-                Read the documentation
+                {t('nav.documentation', { ns: 'common' })}
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </motion.div>

@@ -3,27 +3,29 @@ import OnThisPage from '../../OnThisPage';
 import InstallBlock from '../../InstallBlock';
 import CargoTomlExample from '../../CargoTomlExample';
 import { useRef } from 'react';
+import useTranslation from '@/hooks/useTranslation';
 
 export const Installation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation(['documentation', 'common']);
 
   return (
     <>
       <div className="w-full" ref={containerRef}>
-        <h1 className="text-3xl font-bold text-white mb-4 text-pretty" id="installation">Installation</h1>
+        <h1 className="text-3xl font-bold text-white mb-4 text-pretty" id="installation">{t('documentation:installation.title')}</h1>
         <p className="text-lg text-gray-300 leading-relaxed mb-6 text-pretty">
-          Getting started with Vaultic is a breeze! You can use it in both Rust applications and JavaScript via WebAssembly.
+          {t('documentation:installation.intro')}
         </p>
         
         <div id="javascript-installation" className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-2 text-pretty">JavaScript / TypeScript</h2>
-          <p className="text-gray-300 mb-4 text-pretty">Install using your favorite package manager:</p>
+          <h2 className="text-xl font-semibold text-white mb-2 text-pretty">{t('documentation:installation.javascript')}</h2>
+          <p className="text-gray-300 mb-4 text-pretty">{t('documentation:installation.using')}</p>
           <InstallBlock />
         </div>
         
         <div id="rust-installation" className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-2 text-pretty">Rust</h2>
-          <p className="text-gray-300 mb-4 text-pretty">Add Vaultic to your <code className="text-blue-300">Cargo.toml</code>:</p>
+          <h2 className="text-xl font-semibold text-white mb-2 text-pretty">{t('documentation:installation.rust')}</h2>
+          <p className="text-gray-300 mb-4 text-pretty">{t('documentation:installation.addCargo')}</p>
           <CargoTomlExample
             title="Cargo.toml"
             packageName="vaultic-crypto-engine"
@@ -32,8 +34,8 @@ export const Installation = () => {
         </div>
 
         <div id="webassembly-installation" className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-2 mt-8 text-pretty">WebAssembly Support</h2>
-          <p className="text-gray-300 mb-4 text-pretty">For WebAssembly support, enable the <code className="text-blue-300">wasm</code> feature:</p>
+          <h2 className="text-xl font-semibold text-white mb-2 mt-8 text-pretty">{t('documentation:installation.wasmSupport')}</h2>
+          <p className="text-gray-300 mb-4 text-pretty">{t('documentation:installation.wasmFeature')}</p>
           <CargoTomlExample
             title="Cargo.toml with WASM"
             packageName="vaultic-crypto-engine"
@@ -43,17 +45,17 @@ export const Installation = () => {
         </div>
         
         <div id="building-wasm" className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-2 mt-8 text-pretty">Building for WebAssembly</h2>
-          <p className="text-gray-300 mb-4 text-pretty">To build the WebAssembly module for use in JavaScript:</p>
+          <h2 className="text-xl font-semibold text-white mb-2 mt-8 text-pretty">{t('documentation:installation.buildingWasm')}</h2>
+          <p className="text-gray-300 mb-4 text-pretty">{t('documentation:installation.buildWasmInstructions')}</p>
           <CodeExamples
             language="bash"
-            title="Build Command"
+            title={t('documentation:installation.buildCommand')}
             code={`wasm-pack build --release --target bundler -- --features wasm`}
           />
-          <p className="text-gray-300 mt-4 mb-4 text-pretty">Then you can import and use it in your JavaScript/TypeScript project:</p>
+          <p className="text-gray-300 mt-4 mb-4 text-pretty">{t('documentation:installation.importInstructions')}</p>
           <CodeExamples
             language="javascript"
-            title="JavaScript Import"
+            title={t('documentation:installation.javascriptImport')}
             code={`import init, { generate_rsa_keypair_pem, rsa_encrypt_base64, rsa_decrypt_base64 } from 'vaultic-crypto-engine';
 
 async function run() {

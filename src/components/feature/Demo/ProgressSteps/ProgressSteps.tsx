@@ -2,13 +2,7 @@ import { motion } from 'framer-motion';
 import { KeyRound, Lock, Unlock, CheckCircle, ArrowRight } from 'lucide-react';
 import { FC } from 'react';
 import { ProgressStepsProps } from './ProgressSteps.types';
-
-const steps = [
-  { icon: KeyRound, label: 'Generate Keys' },
-  { icon: Lock, label: 'Encrypt Message' },
-  { icon: Unlock, label: 'Decrypt Message' },
-  { icon: CheckCircle, label: 'Verify Result' },
-];
+import useTranslation from '@/hooks/useTranslation';
 
 export const ProgressSteps: FC<ProgressStepsProps> = ({
   currentStep,
@@ -17,6 +11,16 @@ export const ProgressSteps: FC<ProgressStepsProps> = ({
   messageDecrypted,
   messageVerified,
 }) => {
+  const { t } = useTranslation(['demo', 'common']);
+
+  // Define the steps with translations
+  const steps = [
+    { icon: KeyRound, label: t('keyGeneration.title', { ns: 'demo' }) },
+    { icon: Lock, label: t('encryption.title', { ns: 'demo' }) },
+    { icon: Unlock, label: t('decryption.title', { ns: 'demo' }) },
+    { icon: CheckCircle, label: t('decryption.result', { ns: 'demo' }) },
+  ];
+
   // Calculate the status of each step
   const stepStatus = [
     keyPairGenerated ? 'completed' : currentStep === 0 ? 'current' : 'pending',

@@ -1,0 +1,80 @@
+{
+  "hero": {
+    "title": "Cryptographie sécurisée et performante",
+    "subtitle": "Une solution de chiffrement puissante pour le web avec RSA et AES directement dans votre navigateur, propulsée par WebAssembly",
+    "ctaDemo": "Essayer la démo",
+    "ctaDoc": "Voir la documentation",
+    "secure": "Sécurité. Rapidité. Open Source."
+  },
+  "features": {
+    "title": "Simple et puissant",
+    "subtitle": "Intégrez un chiffrement pro en quelques minutes avec notre API intuitive",
+    "security": {
+      "title": "Sécurité renforcée",
+      "description": "Chiffrement RSA-2048 avec protection contre les attaques temporelles et technologie hybride RSA+AES pour toutes vos données."
+    },
+    "performance": {
+      "title": "Performance maximale",
+      "description": "Code natif en Rust et WebAssembly pour une vitesse optimale sur toutes les plateformes."
+    },
+    "developer": {
+      "title": "Pour les développeurs",
+      "description": "API épurée avec détection automatique de la taille des données et documentation exhaustive."
+    },
+    "compatibility": {
+      "title": "Technologie hybride",
+      "description": "Bascule intelligente entre RSA et RSA+AES pour gérer efficacement toutes les tailles de données."
+    },
+    "clientSide": {
+      "title": "Sécurité locale",
+      "description": "Toutes les opérations s'exécutent dans votre navigateur. Vos données restent sur votre appareil."
+    },
+    "hybridEncryption": {
+      "title": "Chiffrement adaptatif",
+      "description": "Sélection automatique de la méthode de chiffrement idéale selon vos données, sans configuration."
+    },
+    "keyProtection": {
+      "title": "Protection complète",
+      "description": "Sécurisez vos clés et messages avec une protection par mot de passe via PBKDF2 et AES-GCM."
+    },
+    "webAssembly": {
+      "title": "Vitesse WebAssembly",
+      "description": "Performances quasi-natives dans votre navigateur grâce au code Rust compilé."
+    }
+  },
+  "useCases": {
+    "title": "Applications",
+    "endToEnd": {
+      "title": "Chiffrement de bout en bout",
+      "description": "Créez des applications de messagerie sécurisées avec un vrai chiffrement côté client."
+    },
+    "keyManagement": {
+      "title": "Gestion des clés",
+      "description": "Générez et stockez vos clés cryptographiques en toute sécurité dans le navigateur."
+    },
+    "dataProtection": {
+      "title": "Protection des données",
+      "description": "Protégez les informations sensibles avant qu'elles ne quittent l'appareil de l'utilisateur."
+    }
+  },
+  "getStarted": {
+    "title": "Démarrez en quelques minutes",
+    "install": "Installez le package",
+    "generate": "Créez une paire de clés",
+    "encrypt": "Chiffrez vos données",
+    "decrypt": "Déchiffrez vos données"
+  },
+  "codeExample": {
+    "title": "Testez par vous-même",
+    "subtitle": "Vaultic rend le chiffrement simple et accessible",
+    "try": "Essayez maintenant",
+    "language": "JavaScript"
+  },
+  "cta": {
+    "title": "Prêt à sécuriser vos données ?",
+    "description": "Découvrez la puissance de la cryptographie moderne avec",
+    "descriptionEnd": "et commencez à créer des applications sécurisées dès aujourd'hui.",
+    "github": "Voir sur GitHub",
+    "tryDemo": "Essayer la démo"
+  }
+} 

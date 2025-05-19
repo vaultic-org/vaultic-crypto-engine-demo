@@ -1,0 +1,80 @@
+{
+  "hero": {
+    "title": "Secure, Efficient Cryptography for the Web",
+    "subtitle": "Vaultic provides a high-performance cryptographic engine with browser-based RSA and AES encryption powered by WebAssembly",
+    "ctaDemo": "Try Interactive Demo",
+    "ctaDoc": "Read the Docs",
+    "secure": "Secure. Fast. Open Source."
+  },
+  "features": {
+    "title": "Simple to Use, Powerful by Design",
+    "subtitle": "Implement enterprise-grade encryption in minutes with our intuitive API",
+    "security": {
+      "title": "Military-Grade Security",
+      "description": "RSA-2048 encryption with timing attack protection and Vaultic's advanced hybrid RSA+AES encryption for any data size."
+    },
+    "performance": {
+      "title": "Optimized Performance",
+      "description": "Native Rust and WebAssembly support for maximum speed across all platforms."
+    },
+    "developer": {
+      "title": "Developer Experience",
+      "description": "Simple API with automatic handling of data size and comprehensive documentation."
+    },
+    "compatibility": {
+      "title": "Vaultic Hybrid Technology",
+      "description": "Automatically switches between direct RSA and hybrid RSA+AES encryption for seamless handling of any data size."
+    },
+    "clientSide": {
+      "title": "Client-Side Security",
+      "description": "All cryptographic operations run directly in the browser. Your data never leaves your device."
+    },
+    "hybridEncryption": {
+      "title": "Automatic Hybrid Encryption",
+      "description": "Seamlessly switches between direct RSA and hybrid RSA+AES encryption based on data size, with no configuration required."
+    },
+    "keyProtection": {
+      "title": "Key & Message Protection",
+      "description": "Secure your keys and messages with password-based protection using PBKDF2 and AES-GCM."
+    },
+    "webAssembly": {
+      "title": "WebAssembly Performance",
+      "description": "Powered by compiled Rust for near-native speed in the browser."
+    }
+  },
+  "useCases": {
+    "title": "Use Cases",
+    "endToEnd": {
+      "title": "End-to-End Encryption",
+      "description": "Build secure messaging applications with true client-side encryption."
+    },
+    "keyManagement": {
+      "title": "Secure Key Management",
+      "description": "Generate and store cryptographic keys securely in the browser."
+    },
+    "dataProtection": {
+      "title": "Sensitive Data Protection",
+      "description": "Protect user data before it ever leaves their device."
+    }
+  },
+  "getStarted": {
+    "title": "Get Started in Minutes",
+    "install": "Install the package",
+    "generate": "Generate a key pair",
+    "encrypt": "Encrypt your data",
+    "decrypt": "Decrypt your data"
+  },
+  "codeExample": {
+    "title": "See it in Action",
+    "subtitle": "Vaultic makes encryption simple and straightforward",
+    "try": "Try it yourself",
+    "language": "JavaScript"
+  },
+  "cta": {
+    "title": "Ready to Secure Your Data?",
+    "description": "Experience the power of modern cryptography with",
+    "descriptionEnd": "and start building secure applications today.",
+    "github": "View on GitHub",
+    "tryDemo": "Try the Demo"
+  }
+} 

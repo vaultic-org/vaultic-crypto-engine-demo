@@ -12,8 +12,10 @@ import {
   ProgressSteps,
   InfoPanel 
 } from "@/components/feature/Demo";
+import useTranslation from "@/hooks/useTranslation";
 
 const Demo = () => {
+  const { t } = useTranslation(['demo', 'common']);
   const [message, setMessage] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const [isMessageVerified, setIsMessageVerified] = useState(false);
@@ -86,21 +88,21 @@ const Demo = () => {
   // Handle copying public key
   const handleCopyPublicKey = () => {
     if (keyPair?.public_pem) {
-      copyToClipboard(keyPair.public_pem, "Public key copied!");
+      copyToClipboard(keyPair.public_pem, t('keyGeneration.copied', { ns: 'demo' }));
     }
   };
 
   // Handle copying private key
   const handleCopyPrivateKey = () => {
     if (keyPair?.private_pem) {
-      copyToClipboard(keyPair.private_pem, "Private key copied!");
+      copyToClipboard(keyPair.private_pem, t('keyGeneration.copied', { ns: 'demo' }));
     }
   };
 
   // Handle copying encrypted message
   const handleCopyEncrypted = () => {
     if (encryptedMessage) {
-      copyToClipboard(encryptedMessage, "Encrypted message copied!");
+      copyToClipboard(encryptedMessage, t('copied', { ns: 'common' }));
     }
   };
 
@@ -120,11 +122,11 @@ const Demo = () => {
           >
             <h1 className="text-4xl font-bold mb-2 text-center">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-violet-500">
-                RSA Encryption Demo
+                {t('title', { ns: 'demo' })}
               </span>
             </h1>
             <p className="text-center text-gray-300 mb-10">
-              Experience Vaultic's secure cryptographic engine with this interactive demonstration
+              {t('description', { ns: 'demo' })}
             </p>
           </motion.div>
 

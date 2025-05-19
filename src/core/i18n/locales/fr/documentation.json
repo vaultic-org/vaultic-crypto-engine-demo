@@ -1,0 +1,142 @@
+{
+  "title": "Documentation",
+  "overview": {
+    "title": "Aperçu",
+    "description": "Vaultic Crypto Engine est une bibliothèque cryptographique haute performance conçue pour les applications web modernes. Elle exploite la puissance de WebAssembly pour fournir des opérations cryptographiques efficaces et sécurisées directement dans le navigateur."
+  },
+  "sidebar": {
+    "introduction": "INTRODUCTION",
+    "guides": "GUIDES",
+    "gettingStarted": "Démarrage",
+    "installation": "Installation",
+    "usage": "Utilisation",
+    "api": "API",
+    "security": "Sécurité",
+    "search": "Rechercher...",
+    "searchAria": "Rechercher dans la documentation",
+    "noResults": "Aucun résultat trouvé"
+  },
+  "codeExample": {
+    "copied": "Code copié dans le presse-papier !",
+    "logCopied": "Exemple de code copié dans le presse-papier",
+    "hide": "Masquer",
+    "show": "Afficher"
+  },
+  "cargoToml": {
+    "logCopied": "Code Cargo.toml copié dans le presse-papier"
+  },
+  "installation": {
+    "title": "Installation",
+    "intro": "Démarrer avec Vaultic est un jeu d'enfant ! Vous pouvez l'utiliser dans des applications Rust et JavaScript via WebAssembly.",
+    "javascript": "JavaScript / TypeScript",
+    "using": "Installez avec votre gestionnaire de paquets préféré :",
+    "rust": "Rust",
+    "addCargo": "Ajoutez Vaultic à votre fichier Cargo.toml :",
+    "wasmSupport": "Support WebAssembly",
+    "wasmFeature": "Pour le support WebAssembly, activez la fonctionnalité wasm :",
+    "buildingWasm": "Compiler pour WebAssembly",
+    "buildWasmInstructions": "Pour compiler le module WebAssembly et l'utiliser en JavaScript :",
+    "buildCommand": "Commande de compilation",
+    "importInstructions": "Vous pouvez ensuite l'importer et l'utiliser dans votre projet JavaScript/TypeScript :",
+    "javascriptImport": "Import JavaScript",
+    "typescriptNote": "Pour utiliser avec TypeScript, aucune configuration supplémentaire n'est requise. Les types sont inclus dans le package.",
+    "logCopied": "Commande d'installation copiée dans le presse-papier"
+  },
+  "gettingStarted": {
+    "title": "Démarrage",
+    "welcome": "Bienvenue dans Vaultic Crypto Engine ! Cette bibliothèque est conçue pour rendre la cryptographie simple, sûre et rapide pour tous. Que vous construisiez une application web, un service backend ou que vous expérimentiez avec la cryptographie, Vaultic vous offre des opérations RSA sécurisées sans complications — propulsé par Rust et prêt pour JavaScript et WebAssembly.",
+    "capabilities": {
+      "title": "Que pouvez-vous faire avec Vaultic ?",
+      "generate": "Générer des paires de clés RSA (2048 bits, sécurisées par défaut)",
+      "encrypt": "Chiffrer et déchiffrer des données avec RSA-PKCS#1",
+      "protect": "Protéger contre les attaques temporelles et les vulnérabilités courantes",
+      "encode": "Encoder et décoder en Base64 pour un partage facile",
+      "use": "Utiliser dans les navigateurs (WebAssembly) ou Node.js — sans limites",
+      "handle": "Gérer automatiquement des données de toute taille"
+    },
+    "securityNotice": {
+      "title": "Note de sécurité",
+      "content": "Vaultic utilise une implémentation RSA pure en Rust avec des protections supplémentaires contre l'attaque Marvin (RUSTSEC-2023-0071). Pour les projets hautement sensibles, nous recommandons d'utiliser une bibliothèque avec des garanties de temps constant comme aws-lc-rs."
+    }
+  },
+  "usage": {
+    "title": "Utilisation",
+    "intro": "Vaultic est conçu pour être intuitif et convivial pour les développeurs. Voici quelques exemples concrets qui vous aideront à démarrer rapidement avec la génération de clés, le chiffrement et le déchiffrement.",
+    "keyGeneration": {
+      "title": "Génération de clés",
+      "description": "Générez une paire de clés RSA sécurisée en une seule ligne :",
+      "exampleTitle": "Exemple de génération de clés"
+    },
+    "encryption": {
+      "title": "Chiffrement",
+      "description": "Chiffrez n'importe quel message avec votre clé publique - le chiffrement hybride est automatique :",
+      "exampleTitle": "Exemple de chiffrement"
+    },
+    "decryption": {
+      "title": "Déchiffrement",
+      "description": "Déchiffrez des messages avec votre clé privée - la détection du format est automatique :",
+      "exampleTitle": "Exemple de déchiffrement"
+    },
+    "keyProtection": {
+      "title": "Protection des clés",
+      "description": "Protégez votre paire de clés avec un mot de passe :",
+      "exampleTitle": "Exemple de protection de clés"
+    },
+    "messageProtection": {
+      "title": "Protection des messages",
+      "description": "Chiffrez des messages avec une protection par mot de passe :",
+      "exampleTitle": "Exemple de protection de message"
+    }
+  },
+  "api": {
+    "title": "Référence API",
+    "intro": "Vous trouverez ici tout ce dont vous avez besoin pour utiliser les fonctionnalités cryptographiques de Vaultic dans votre application. Chaque fonction est conçue pour être simple, sûre et facile à utiliser — pas besoin d'un doctorat en cryptographie !",
+    "example": "Exemple",
+    "type": "Type",
+    "mainTypes": "Types principaux",
+    "types": "Types",
+    "errorHandling": "Gestion des erreurs",
+    "errorHandlingExample": "Exemple de gestion d'erreur",
+    "sections": {
+      "generate_rsa_keypair_pem": {
+        "description": "Générez une paire de clés RSA sécurisée (2048 bits). Renvoie un objet avec vos clés publique et privée au format PEM."
+      },
+      "rsa_encrypt_base64": {
+        "description": "Chiffrez n'importe quelle chaîne à l'aide d'une clé publique RSA. Le résultat est une chaîne encodée en base64, prête à être partagée ou stockée."
+      },
+      "rsa_decrypt_base64": {
+        "description": "Déchiffrez une chaîne encodée en base64 à l'aide de votre clé privée RSA. Renvoie le message original."
+      }
+    }
+  },
+  "security": {
+    "title": "Sécurité",
+    "intro": "La sécurité est au cœur de Vaultic. Voici comment nous protégeons vos données et ce que vous devez savoir pour utiliser la cryptographie de manière responsable.",
+    "protection": {
+      "title": "Comment Vaultic vous protège",
+      "point1": "Construit sur la bibliothèque RSA fiable de Rust",
+      "point2": "Audits de sécurité réguliers et tests approfondis",
+      "point3": "Sécurité mémoire pour prévenir les fuites",
+      "point4": "Protection contre les attaques temporelles"
+    },
+    "reminders": {
+      "title": "Rappels de sécurité",
+      "point1": "Ne stockez jamais les clés privées en texte brut",
+      "point2": "Utilisez des tailles de clés robustes (2048 bits ou plus recommandés)",
+      "point3": "Protégez vos clés privées avec un mot de passe fort",
+      "point4": "Ne partagez jamais vos clés privées"
+    },
+    "practices": {
+      "title": "Bonnes pratiques",
+      "point1": "Utilisez des clés différentes pour le chiffrement et la signature",
+      "point2": "Renouvelez régulièrement vos paires de clés",
+      "point3": "Implémentez des politiques de rotation des clés",
+      "point4": "Surveillez l'utilisation des clés",
+      "point5": "Maintenez Vaultic à jour"
+    },
+    "warning": {
+      "title": "Note importante",
+      "content": "Vaultic utilise une implémentation RSA en Rust. Bien qu'elle soit sécurisée, suivez toujours les meilleures pratiques et gardez vos clés à jour. Pour les applications hautement sensibles, envisagez des bibliothèques avec des garanties de temps constant."
+    }
+  }
+} 
