@@ -1,7 +1,27 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 function SecurityEasterEgg() {
   const [showKey, setShowKey] = useState(false);
+  const commentRef = useRef<Comment | null>(null);
+  
+  // Function to store the private key in IndexedDB and insert the HTML comment
+  const revealSecrets = () => {
+    // Show the key panel
+    setShowKey(true);
+    
+    // Store the private key in IndexedDB
+    storePrivateKeyInIndexedDB();
+    
+    // Create and insert the HTML comment with the encrypted message
+    const commentNode = document.createComment(`
+        jArsOjqfFOxmnWDLEmKMqy+We6fYQChVpKAqROt9gEHUfJbex8Xg6bwxyvpRC2yKGYtuFjJF/v1jdakBNLTfONb+vRpSr/3rFvOXilcF2KcEkGyy/YOEWHdeNjNDmfCdhSxiqj6uAsoPY8r1Bw2Bzo4nNhJ4/nIUAYy1WnI+P0D5/KcVHDZu+gjpPXzDmlgB90xhFwsLZ2EzT8hrkF+qiXbvPFUe+BDw1Z2lxkIu6Tbd/ArfKk/RSfQ6eGN8sbLSxySL2/StUNIwWuZGo4j8zQqSYS1L7EH57o9QfAWh8l8xjRfOJiifZg5XPu0taXtoeZw369ynfE0mkRtEJZAEjQ==
+    `);
+    
+    document.body.appendChild(commentNode);
+    commentRef.current = commentNode;
+    
+    console.log("Easter egg revealed: Secret comment added to HTML source!");
+  };
   
   const storePrivateKeyInIndexedDB = () => {
     // Store private key in IndexedDB for later retrieval
@@ -90,10 +110,7 @@ ADMIN_PASSWORD=vaultic-demo-password
       <button 
         className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mb-4"
         style={{ display: 'none' }} // Users need to change this to display: block
-        onClick={() => {
-          setShowKey(true);
-          storePrivateKeyInIndexedDB();
-        }}
+        onClick={revealSecrets}
       >
         REVEAL SECRET KEY
       </button>
@@ -145,14 +162,6 @@ EA5sLCzxpBG3h1prP1Y9fln2CphD3ujJps6oJq+xhmEiz7KBDWd7FpuVgCnrv/2G
           <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">LinkedIn</button>
         </div>
       </div>
-
-      {/* Hidden message in HTML comment that can be seen in view-source */}
-      {/* <!-- 
-        ENCRYPTED MESSAGE FOR ADMIN ACCESS:
-        jArsOjqfFOxmnWDLEmKMqy+We6fYQChVpKAqROt9gEHUfJbex8Xg6bwxyvpRC2yKGYtuFjJF/v1jdakBNLTfONb+vRpSr/3rFvOXilcF2KcEkGyy/YOEWHdeNjNDmfCdhSxiqj6uAsoPY8r1Bw2Bzo4nNhJ4/nIUAYy1WnI+P0D5/KcVHDZu+gjpPXzDmlgB90xhFwsLZ2EzT8hrkF+qiXbvPFUe+BDw1Z2lxkIu6Tbd/ArfKk/RSfQ6eGN8sbLSxySL2/StUNIwWuZGo4j8zQqSYS1L7EH57o9QfAWh8l8xjRfOJiifZg5XPu0taXtoeZw369ynfE0mkRtEJZAEjQ==
-        
-        Hint: Try the private key with our crypto demo...
-      --> */}
 
       <style dangerouslySetInnerHTML={{ __html: `
         .glitch-text {
