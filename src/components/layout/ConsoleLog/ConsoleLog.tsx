@@ -69,8 +69,7 @@ const ConsoleLog = () => {
             >
               <div 
                 ref={logContainerRef}
-                className="p-3 font-mono text-sm max-h-[300px] overflow-y-auto scroll-smooth"
-                style={{ width: '500px' }}
+                className="p-3 font-mono text-sm max-h-[200px] sm:max-h-[300px] overflow-y-auto scroll-smooth w-full sm:w-[500px]"
               >
                 {logs.length === 0 ? (
                   <div className="text-gray-500 italic text-center py-4">
@@ -88,7 +87,7 @@ const ConsoleLog = () => {
                             : 'text-blue-400'
                       }`}
                     >
-                      <span className="text-gray-500">[{log.timestamp}]</span> {log.message}
+                      <span className="text-gray-500">[{new Date(log.timestamp).toLocaleTimeString()}]</span> {log.message}
                     </div>
                   ))
                 )}
