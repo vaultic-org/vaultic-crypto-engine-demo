@@ -1,15 +1,15 @@
 import { FC } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/common/Card';
-import { BookOpen, Lock, ShieldCheck, ArrowRight, Code } from 'lucide-react';
+import { BookOpen, Lock, ShieldCheck, ArrowRight, Code, CheckCircle } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { InfoStep } from './InfoPanel.types';
+import { InfoStep, InfoPanelProps } from './InfoPanel.types';
 import useTranslation from '@/hooks/useTranslation';
 
-export const InfoPanel: FC = () => {
+export const InfoPanel: FC<InfoPanelProps> = ({ cryptoMode }) => {
   const { t } = useTranslation(['demo', 'common']);
 
-  const infoSteps: InfoStep[] = [
+  const rsaSteps: InfoStep[] = [
     {
       title: t('keyGeneration.title', { ns: 'demo' }),
       description: t('keyGeneration.description', { ns: 'demo' }),
@@ -17,7 +17,7 @@ export const InfoPanel: FC = () => {
     },
     {
       title: t('encryption.title', { ns: 'demo' }),
-      description: t('encryption.hybrid', { ns: 'demo' }),
+      description: t('encryption.description', { ns: 'demo' }),
       icon: Code,
     },
     {
@@ -26,6 +26,26 @@ export const InfoPanel: FC = () => {
       icon: Lock,
     },
   ];
+
+  const ecdhSteps: InfoStep[] = [
+    {
+      title: t('keyGeneration.title', { ns: 'demo' }),
+      description: t('keyGeneration.description', { ns: 'demo' }),
+      icon: ShieldCheck,
+    },
+    {
+      title: t('encryption.title', { ns: 'demo' }),
+      description: t('systemLogs.encryptingMessageEcdh', {bytes: 'N'}),
+      icon: Code,
+    },
+    {
+      title: t('decryption.title', { ns: 'demo' }),
+      description: t('systemLogs.decryptingMessageEcdh'),
+      icon: CheckCircle,
+    },
+  ];
+
+  const infoSteps = cryptoMode === 'RSA' ? rsaSteps : ecdhSteps;
 
   return (
     <motion.div

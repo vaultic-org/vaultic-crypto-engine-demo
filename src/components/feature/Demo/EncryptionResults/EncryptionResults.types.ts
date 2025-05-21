@@ -1,9 +1,12 @@
+import { CryptoMode } from '@/core/store/cryptoStore';
+
 export interface EncryptionResultsProps {
-    encryptedMessage: string;
+    processedData: string;
     decryptedMessage: string;
     originalMessage: string;
-    onCopyEncrypted: () => void;
-    onEncryptedMessageEdit?: (newEncryptedMessage: string) => void;
-    isHybridEncryption?: boolean;
-    allowCustomEncrypted?: boolean;
+    onCopyProcessedData: () => void;
+    onProcessedDataEdit?: (newProcessedData: string) => void;
+    isHybridRsaEncryption?: boolean;
+    allowCustomProcessedData?: boolean;
+    cryptoMode: CryptoMode;
 }

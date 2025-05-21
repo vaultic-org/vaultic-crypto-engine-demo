@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Card } from '@/components/common/Card';
-import { KeyRound, Lock, Unlock, RotateCcw, Info } from 'lucide-react';
+import { KeyRound, Lock, Unlock, RotateCcw, Info, Edit3, CheckCircle } from 'lucide-react';
 import { Tooltip } from '@/components/common/Tooltip';
 import { MessageInputProps } from './MessageInput.types';
 import useTranslation from '@/hooks/useTranslation';
@@ -12,16 +12,24 @@ export const MessageInput: FC<MessageInputProps> = ({
   message,
   onMessageChange,
   onGenerateKeyPair,
-  onEncrypt,
-  onDecrypt,
+  onProcessPrimary,
+  onProcessSecondary,
   onReset,
   isGenerating,
-  isEncrypting,
-  isDecrypting,
+  isProcessingPrimary,
+  isProcessingSecondary,
   hasKeyPair,
-  hasEncryptedMessage,
+  hasProcessedData,
+  cryptoMode,
 }) => {
   const { t } = useTranslation(['demo', 'common']);
+
+  const primaryActionText = cryptoMode === 'RSA' ? t('encryption.encryptButton', { ns: 'demo' }) : t('encryption.signButton', { ns: 'demo' });
+  const secondaryActionText = cryptoMode === 'RSA' ? t('decryption.decryptButton', { ns: 'demo' }) : t('decryption.verifyButton', { ns: 'demo' });
+  const generateButtonText = cryptoMode === 'RSA' ? t('keyGeneration.generateButton', { ns: 'demo' }) : t('keyGeneration.generateEccButton', { ns: 'demo' });
+  
+  const PrimaryIcon = cryptoMode === 'RSA' ? Lock : Edit3;
+  const SecondaryIcon = cryptoMode === 'RSA' ? Unlock : CheckCircle;
 
   return (
     <motion.div
@@ -34,12 +42,14 @@ export const MessageInput: FC<MessageInputProps> = ({
           <div className="p-2 rounded-full bg-blue-500/10 mr-3">
             <Info className="w-5 h-5 text-blue-400" />
           </div>
-          <h2 className="text-xl font-semibold">{t('encryption.title', { ns: 'demo' })}</h2>
+          <h2 className="text-xl font-semibold">
+            {cryptoMode === 'RSA' ? t('encryption.title', { ns: 'demo' }) : t('encryption.title', { ns: 'demo' })}
+          </h2>
         </div>
 
         <div className="mb-6">
           <label className="block text-sm font-medium mb-2 text-gray-300">
-            {t('encryption.description', { ns: 'demo' })}
+            {cryptoMode === 'RSA' ? t('encryption.description', { ns: 'demo' }) : t('encryption.description', { ns: 'demo' }) }
           </label>
           <div className="relative">
             <Input
@@ -53,7 +63,7 @@ export const MessageInput: FC<MessageInputProps> = ({
               {message.length} chars
             </div>
           </div>
-          {message.length > 245 && (
+          {cryptoMode === 'RSA' && message.length > 190 && (
             <p className="mt-2 text-xs text-amber-400 flex items-center">
               <Info className="w-3 h-3 mr-1" />
               {t('encryption.hybrid', { ns: 'demo' })}
@@ -62,7 +72,7 @@ export const MessageInput: FC<MessageInputProps> = ({
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Tooltip content={t('keyGeneration.description', { ns: 'demo' })}>
+          <Tooltip content={cryptoMode === 'RSA' ? t('keyGeneration.description', { ns: 'demo' }) : t('keyGeneration.description', { ns: 'demo' }) }>
             <Button
               onClick={onGenerateKeyPair}
               isLoading={isGenerating}
@@ -70,43 +80,43 @@ export const MessageInput: FC<MessageInputProps> = ({
               leftIcon={<KeyRound className="w-4 h-4" />}
               className="hover:shadow-blue-500/20 hover:shadow-lg transition-shadow"
             >
-              {t('keyGeneration.generateButton', { ns: 'demo' })}
+              {generateButtonText}
             </Button>
           </Tooltip>
 
-          <Tooltip content={!hasKeyPair ? t('keyGeneration.generateButton', { ns: 'demo' }) : !message ? t('encryption.messagePlaceholder', { ns: 'demo' }) : t('encryption.encryptButton', { ns: 'demo' })}>
+          <Tooltip content={!hasKeyPair ? generateButtonText : !message ? t('encryption.messagePlaceholder', { ns: 'demo' }) : primaryActionText}>
             <Button
-              onClick={onEncrypt}
-              isLoading={isEncrypting}
+              onClick={onProcessPrimary}
+              isLoading={isProcessingPrimary}
               loadingText={t('loading', { ns: 'common' })}
-              leftIcon={<Lock className="w-4 h-4" />}
+              leftIcon={<PrimaryIcon className="w-4 h-4" />}
               disabled={!hasKeyPair || !message}
               variant="secondary"
               className="hover:shadow-purple-500/20 hover:shadow-lg transition-shadow"
             >
-              {t('encryption.encryptButton', { ns: 'demo' })}
+              {primaryActionText}
             </Button>
           </Tooltip>
 
-          <Tooltip content={!hasEncryptedMessage ? t('encryption.encryptButton', { ns: 'demo' }) : t('decryption.decryptButton', { ns: 'demo' })}>
+          <Tooltip content={!hasProcessedData ? primaryActionText : secondaryActionText}>
             <Button
-              onClick={onDecrypt}
-              isLoading={isDecrypting}
+              onClick={onProcessSecondary}
+              isLoading={isProcessingSecondary}
               loadingText={t('loading', { ns: 'common' })}
-              leftIcon={<Unlock className="w-4 h-4" />}
-              disabled={!hasEncryptedMessage}
+              leftIcon={<SecondaryIcon className="w-4 h-4" />}
+              disabled={!hasProcessedData}
               variant="secondary"
               className="hover:shadow-green-500/20 hover:shadow-lg transition-shadow"
             >
-              {t('decryption.decryptButton', { ns: 'demo' })}
+              {secondaryActionText}
             </Button>
           </Tooltip>
 
-          <Tooltip content={t('common.reset', { ns: 'common' })}>
+          <Tooltip content={t('common.reset', { ns: 'common' })}> 
             <Button
               onClick={onReset}
               leftIcon={<RotateCcw className="w-4 h-4" />}
-              disabled={!hasKeyPair && !message}
+              disabled={!hasKeyPair && !message && !hasProcessedData}
               variant="ghost"
             >
               {t('common.reset', { ns: 'common' })}

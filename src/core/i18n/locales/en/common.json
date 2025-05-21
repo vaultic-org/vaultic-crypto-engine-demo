@@ -16,22 +16,64 @@
     "select": "Select language"
   },
   "common": {
-    "loading": "Loading...",
+    "appName": "Vaultic Crypto Engine",
+    "description": "Secure client-side encryption and decryption.",
     "error": "An error occurred",
-    "copy": "Copy",
-    "copied": "Copied!",
+    "copied": "Copied to clipboard!",
     "reset": "Reset",
+    "resetAll": "Reset Demo",
+    "resetMessage": "Reset Message",
     "submit": "Submit",
+    "loading": "Loading...",
+    "showMore": "Show More",
+    "showLess": "Show Less",
+    "edit": "Edit",
+    "save": "Save",
     "cancel": "Cancel",
-    "close": "Close",
-    "generate": "Generate",
-    "encrypt": "Encrypt",
-    "decrypt": "Decrypt",
-    "protect": "Protect",
-    "unprotect": "Unprotect",
-    "back": "Back",
-    "next": "Next",
-    "openMenu": "Open main menu"
+    "copy": "Copy",
+    "nav": {
+      "home": "Home",
+      "demo": "Demo",
+      "documentation": "Documentation",
+      "github": "GitHub",
+      "theme": "Theme",
+      "language": "Language",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "fr": "Français",
+      "en": "English",
+      "back": "Back",
+      "next": "Next",
+      "openMenu": "Open main menu"
+    },
+    "footer": {
+      "copyright": "© {{year}} Vaultic. All rights reserved.",
+      "resources": "Resources",
+      "legal": "Legal",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service",
+      "githubRepository": "GitHub Repository",
+      "version": "Version"
+    },
+    "errorPage": {
+      "title": "Oops! Something went wrong.",
+      "message": "We encountered an unexpected error. Please try again later or contact support if the issue persists.",
+      "goHome": "Go to Homepage"
+    },
+    "documentation": {
+      "searchPlaceholder": "Search documentation...",
+      "tocTitle": "On this page",
+      "editPage": "Edit this page on GitHub",
+      "lastUpdated": "Last updated on",
+      "notFound": {
+        "title": "Page Not Found",
+        "message": "Sorry, we couldn't find the page you're looking for."
+      },
+      "examples": {
+        "title": "Usage Examples"
+      }
+    }
   },
   "footer": {
     "copyright": "© {{year}} Vaultic Org. All rights reserved.",
@@ -56,5 +98,13 @@
     "usageExamples": {
       "title": "Usage Examples"
     }
+  },
+  "buttons": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "edit": "Edit",
+    "save": "Save",
+    "copy": "Copy"
   }
 } 

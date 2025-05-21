@@ -1,13 +1,16 @@
+import { CryptoMode } from '@/core/store/cryptoStore';
+
 export interface MessageInputProps {
     message: string;
     onMessageChange: (message: string) => void;
     onGenerateKeyPair: () => void;
-    onEncrypt: () => void;
-    onDecrypt: () => void;
+    onProcessPrimary: () => void;
+    onProcessSecondary: () => void;
     onReset: () => void;
     isGenerating: boolean;
-    isEncrypting: boolean;
-    isDecrypting: boolean;
+    isProcessingPrimary: boolean;
+    isProcessingSecondary: boolean;
     hasKeyPair: boolean;
-    hasEncryptedMessage: boolean;
+    hasProcessedData: boolean;
+    cryptoMode: CryptoMode;
   }
