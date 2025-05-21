@@ -40,33 +40,33 @@ const decrypted = await rsa_decrypt_base64(
 console.log("RSA Decrypted:", decrypted);
   `;
 
-  const eccCodeExample = `
+  const ecdhCodeExample = `
 import {
-  generate_ecdsa_keypair_wasm,
+  generate_ecdh_keypair_wasm,
   WasmEccCurve,
-  ecdsa_sign_p256_wasm,
-  ecdsa_verify_p256_wasm
+  ecdh_derive_secret_wasm
 } from "@vaultic/crypto-engine";
 
-// Generate an ECDSA P-256 key pair
-const eccKeypair = generate_ecdsa_keypair_wasm(WasmEccCurve.P256);
+// Generate ECDH P-256 key pairs for Alice and Bob
+const aliceKeypair = generate_ecdh_keypair_wasm(WasmEccCurve.P256);
+const bobKeypair = generate_ecdh_keypair_wasm(WasmEccCurve.P256);
 
-const message = "Message to sign with ECDSA P-256";
-
-// Sign the message
-const signature = ecdsa_sign_p256_wasm(
-  message,
-  eccKeypair.private_pem
+// Alice derives a shared secret using her private key and Bob's public key
+const sharedSecretAlice = ecdh_derive_secret_wasm(
+  aliceKeypair.private_pem,
+  bobKeypair.public_pem
 );
-console.log("ECDSA Signature:", signature);
+console.log("ECDH Shared Secret (Alice):", sharedSecretAlice);
 
-// Verify the signature
-const isValid = ecdsa_verify_p256_wasm(
-  message,
-  signature,
-  eccKeypair.public_pem
+// Bob derives the same shared secret using his private key and Alice's public key
+const sharedSecretBob = ecdh_derive_secret_wasm(
+  bobKeypair.private_pem,
+  aliceKeypair.public_pem
 );
-console.log("Is ECDSA Signature Valid?", isValid);
+console.log("ECDH Shared Secret (Bob):", sharedSecretBob);
+
+// Both shared secrets should be identical
+console.log("Shared secrets are identical:", sharedSecretAlice === sharedSecretBob);
   `;
 
   const codeTabs = [
@@ -77,10 +77,10 @@ console.log("Is ECDSA Signature Valid?", isValid);
       icon: "fas fa-key",
     },
     {
-      label: "ECC",
+      label: "ECDH",
       language: "typescript",
-      code: eccCodeExample,
-      icon: "fas fa-fingerprint",
+      code: ecdhCodeExample,
+      icon: "fas fa-handshake",
     },
   ];
 
