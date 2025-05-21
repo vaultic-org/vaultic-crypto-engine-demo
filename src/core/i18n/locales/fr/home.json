@@ -1,29 +1,29 @@
 {
   "hero": {
     "title": "Cryptographie sécurisée et performante",
-    "subtitle": "Une solution de chiffrement puissante pour le web avec RSA et AES directement dans votre navigateur, propulsée par WebAssembly",
+    "subtitle": "Chiffrement haute performance RSA, ECC & AES, via WebAssembly dans le navigateur.",
     "ctaDemo": "Essayer la démo",
     "ctaDoc": "Voir la documentation",
     "secure": "Sécurité. Rapidité. Open Source."
   },
   "features": {
     "title": "Simple et puissant",
-    "subtitle": "Intégrez un chiffrement pro en quelques minutes avec notre API intuitive",
+    "subtitle": "Intégrez un chiffrement de niveau professionnel rapidement grâce à notre API intuitive.",
     "security": {
-      "title": "Sécurité renforcée",
-      "description": "Chiffrement RSA-2048 avec protection contre les attaques temporelles et technologie hybride RSA+AES pour toutes vos données."
+      "title": "Cryptographie robuste",
+      "description": "RSA-2048 robuste, signatures ECDSA (P-256, K-256) & RSA+AES hybride. Conçu avec des protections contre les attaques temporelles."
     },
     "performance": {
       "title": "Performance maximale",
-      "description": "Code natif en Rust et WebAssembly pour une vitesse optimale sur toutes les plateformes."
+      "description": "Noyau Rust & WebAssembly optimisé pour une vitesse multiplateforme maximale."
     },
     "developer": {
       "title": "Pour les développeurs",
-      "description": "API épurée avec détection automatique de la taille des données et documentation exhaustive."
+      "description": "API simplifiée avec gestion auto de la taille des données & documentation complète."
     },
     "compatibility": {
-      "title": "Technologie hybride",
-      "description": "Bascule intelligente entre RSA et RSA+AES pour gérer efficacement toutes les tailles de données."
+      "title": "Cryptographie polyvalente",
+      "description": "Polyvalence RSA, ECC (P-256/K-256 pour ECDSA/ECDH) & AES. Chiffrement hybride intelligent, adapté à toute taille de données."
     },
     "clientSide": {
       "title": "Sécurité locale",
@@ -40,6 +40,10 @@
     "webAssembly": {
       "title": "Vitesse WebAssembly",
       "description": "Performances quasi-natives dans votre navigateur grâce au code Rust compilé."
+    },
+    "eccSupport": {
+      "title": "Suite ECC moderne",
+      "description": "Suite ECC complète : ECDSA (P-256, K-256) pour signatures numériques & ECDH (P-256, K-256) pour l'accord de clés."
     }
   },
   "useCases": {
@@ -71,9 +75,9 @@
     "language": "JavaScript"
   },
   "cta": {
-    "title": "Prêt à sécuriser vos données ?",
-    "description": "Découvrez la puissance de la cryptographie moderne avec",
-    "descriptionEnd": "et commencez à créer des applications sécurisées dès aujourd'hui.",
+    "title": "Prêt à blinder vos données ?",
+    "description": "Exploitez la puissance de la cryptographie moderne avec ",
+    "descriptionEnd": " et renforcez la sécurité de vos applications dès aujourd'hui.",
     "github": "Voir sur GitHub",
     "tryDemo": "Essayer la démo"
   }

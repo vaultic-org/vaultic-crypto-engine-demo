@@ -1,29 +1,29 @@
 {
   "hero": {
     "title": "Secure, Efficient Cryptography for the Web",
-    "subtitle": "Vaultic provides a high-performance cryptographic engine with browser-based RSA and AES encryption powered by WebAssembly",
+    "subtitle": "High-performance RSA, ECC, & AES encryption, in-browser via WebAssembly.",
     "ctaDemo": "Try Interactive Demo",
     "ctaDoc": "Read the Docs",
     "secure": "Secure. Fast. Open Source."
   },
   "features": {
     "title": "Simple to Use, Powerful by Design",
-    "subtitle": "Implement enterprise-grade encryption in minutes with our intuitive API",
+    "subtitle": "Integrate enterprise-grade encryption swiftly with our intuitive API.",
     "security": {
-      "title": "Military-Grade Security",
-      "description": "RSA-2048 encryption with timing attack protection and Vaultic's advanced hybrid RSA+AES encryption for any data size."
+      "title": "Robust Cryptography",
+      "description": "Robust RSA-2048, ECDSA (P-256, K-256) signatures, & hybrid RSA+AES. Built with timing attack mitigations."
     },
     "performance": {
       "title": "Optimized Performance",
-      "description": "Native Rust and WebAssembly support for maximum speed across all platforms."
+      "description": "Optimized Rust & WebAssembly core for maximum cross-platform speed."
     },
     "developer": {
       "title": "Developer Experience",
-      "description": "Simple API with automatic handling of data size and comprehensive documentation."
+      "description": "Streamlined API with automatic data-size handling & extensive documentation."
     },
     "compatibility": {
-      "title": "Vaultic Hybrid Technology",
-      "description": "Automatically switches between direct RSA and hybrid RSA+AES encryption for seamless handling of any data size."
+      "title": "Versatile Cryptography",
+      "description": "Versatile RSA, ECC (P-256/K-256 for ECDSA/ECDH), & AES. Smart hybrid encryption adapts to any data size."
     },
     "clientSide": {
       "title": "Client-Side Security",
@@ -40,6 +40,10 @@
     "webAssembly": {
       "title": "WebAssembly Performance",
       "description": "Powered by compiled Rust for near-native speed in the browser."
+    },
+    "eccSupport": {
+      "title": "Modern ECC Suite",
+      "description": "Full-suite ECC: ECDSA (P-256, K-256) for digital signatures & ECDH (P-256, K-256) for key agreement."
     }
   },
   "useCases": {
@@ -71,9 +75,9 @@
     "language": "JavaScript"
   },
   "cta": {
-    "title": "Ready to Secure Your Data?",
-    "description": "Experience the power of modern cryptography with",
-    "descriptionEnd": "and start building secure applications today.",
+    "title": "Ready to Fortify Your Data?",
+    "description": "Harness the power of modern cryptography with ",
+    "descriptionEnd": " and elevate your application security today.",
     "github": "View on GitHub",
     "tryDemo": "Try the Demo"
   }

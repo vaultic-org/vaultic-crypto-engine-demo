@@ -1,15 +1,88 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
 import { Button } from "@/components/common/Button";
 import useTranslation from "@/hooks/useTranslation";
+import CodeSnippetTabs from "@/components/common/CodeSnippetTabs";
 
 const Home = () => {
-  const { t } = useTranslation(['common', 'home']);
+  const { t } = useTranslation(["common", "home"]);
+
+  const rsaCodeExample = `
+import {
+  generate_rsa_keypair_pem,
+  rsa_encrypt_base64,
+  rsa_decrypt_base64
+} from "@vaultic/crypto-engine";
+
+// Generate an RSA key pair
+const keypair = await generate_rsa_keypair_pem();
+
+// Encrypt a message - works with any data size!
+// Vaultic auto-detects data size and uses either:
+// - Direct RSA for small data
+// - Hybrid RSA+AES for large data
+const message = "Secret message for RSA encryption";
+const encrypted = await rsa_encrypt_base64(
+  keypair.public_pem,
+  message
+);
+
+console.log("RSA Encrypted:", encrypted);
+
+// Decrypt with unified API
+const decrypted = await rsa_decrypt_base64(
+  keypair.private_pem,
+  encrypted
+);
+console.log("RSA Decrypted:", decrypted);
+  `;
+
+  const eccCodeExample = `
+import {
+  generate_ecdsa_keypair_wasm,
+  WasmEccCurve,
+  ecdsa_sign_p256_wasm,
+  ecdsa_verify_p256_wasm
+} from "@vaultic/crypto-engine";
+
+// Generate an ECDSA P-256 key pair
+const eccKeypair = generate_ecdsa_keypair_wasm(WasmEccCurve.P256);
+
+const message = "Message to sign with ECDSA P-256";
+
+// Sign the message
+const signature = ecdsa_sign_p256_wasm(
+  message,
+  eccKeypair.private_pem
+);
+console.log("ECDSA Signature:", signature);
+
+// Verify the signature
+const isValid = ecdsa_verify_p256_wasm(
+  message,
+  signature,
+  eccKeypair.public_pem
+);
+console.log("Is ECDSA Signature Valid?", isValid);
+  `;
+
+  const codeTabs = [
+    {
+      label: "RSA",
+      language: "typescript",
+      code: rsaCodeExample,
+      icon: "fas fa-key",
+    },
+    {
+      label: "ECC",
+      language: "typescript",
+      code: eccCodeExample,
+      icon: "fas fa-fingerprint",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -38,7 +111,7 @@ const Home = () => {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="px-4 py-1.5 mb-4 text-xs font-semibold rounded-full glossy-card text-blue-400 shadow-md w-max"
               >
-                {t('hero.secure', { ns: 'home' })}
+                {t("hero.secure", { ns: "home" })}
               </motion.span>
 
               <motion.h1
@@ -47,18 +120,18 @@ const Home = () => {
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="text-5xl md:text-7xl font-extrabold mb-6 gradient-text tracking-tight leading-none"
               >
-                {t('app.name', { ns: 'common' })}
+                {t("app.name", { ns: "common" })}
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed"
+                className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed text-center"
               >
-                {t('hero.subtitle', { ns: 'home' })}
+                {t("hero.subtitle", { ns: "home" })}
                 <span className="block mt-2 text-blue-400">
-                  {t('footer.slogan', { ns: 'common' })}
+                  {t("footer.slogan", { ns: "common" })}
                 </span>
               </motion.p>
 
@@ -75,7 +148,7 @@ const Home = () => {
                   size="lg"
                   className="glossy-button group"
                 >
-                  {t('hero.ctaDemo', { ns: 'home' })}
+                  {t("hero.ctaDemo", { ns: "home" })}
                   <i className="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </Button>
 
@@ -87,7 +160,7 @@ const Home = () => {
                   className="glossy-button"
                 >
                   <i className="fas fa-book mr-2"></i>
-                  {t('nav.documentation', { ns: 'common' })}
+                  {t("nav.documentation", { ns: "common" })}
                 </Button>
               </motion.div>
             </motion.div>
@@ -110,7 +183,7 @@ const Home = () => {
                 transition={{ duration: 0.5 }}
                 className="text-4xl md:text-5xl font-bold mb-4 gradient-text tracking-tight"
               >
-                {t('features.title', { ns: 'home' })}
+                {t("features.title", { ns: "home" })}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -118,7 +191,7 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-xl text-gray-300 max-w-3xl mx-auto"
               >
-                {t('features.subtitle', { ns: 'home' })}
+                {t("features.subtitle", { ns: "home" })}
               </motion.p>
             </div>
 
@@ -136,10 +209,10 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        {t('features.security.title', { ns: 'home' })}
+                        {t("features.security.title", { ns: "home" })}
                       </h3>
                       <p className="text-gray-400">
-                        {t('features.security.description', { ns: 'home' })}
+                        {t("features.security.description", { ns: "home" })}
                       </p>
                     </div>
                   </div>
@@ -157,10 +230,10 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        {t('features.performance.title', { ns: 'home' })}
+                        {t("features.eccSupport.title", { ns: "home" })}
                       </h3>
                       <p className="text-gray-400">
-                        {t('features.performance.description', { ns: 'home' })}
+                        {t("features.eccSupport.description", { ns: "home" })}
                       </p>
                     </div>
                   </div>
@@ -174,14 +247,14 @@ const Home = () => {
                 >
                   <div className="flex items-start space-x-4">
                     <div className="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <i className="fas fa-code text-xl text-blue-400"></i>
+                      <i className="fas fa-tachometer-alt text-xl text-blue-400"></i>
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        {t('features.developer.title', { ns: 'home' })}
+                        {t("features.performance.title", { ns: "home" })}
                       </h3>
                       <p className="text-gray-400">
-                        {t('features.developer.description', { ns: 'home' })}
+                        {t("features.performance.description", { ns: "home" })}
                       </p>
                     </div>
                   </div>
@@ -199,10 +272,12 @@ const Home = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-white">
-                        {t('features.compatibility.title', { ns: 'home' })}
+                        {t("features.compatibility.title", { ns: "home" })}
                       </h3>
                       <p className="text-gray-400">
-                        {t('features.compatibility.description', { ns: 'home' })}
+                        {t("features.compatibility.description", {
+                          ns: "home",
+                        })}
                       </p>
                     </div>
                   </div>
@@ -213,56 +288,9 @@ const Home = () => {
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
-                className="code-section rounded-xl overflow-hidden"
+                className="code-section rounded-xl overflow-hidden mx-auto w-full max-w-xl"
               >
-                <div className="code-header p-4 flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span className="text-sm text-gray-400 ml-2">vaultic-crypto-engine.ts</span>
-                </div>
-                <div className="code-content p-6">
-                    <SyntaxHighlighter
-                      language="typescript"
-                      style={vscDarkPlus}
-                      customStyle={{
-                        borderRadius: "0.75rem",
-                        background: "rgba(15,23,42,0.95)",
-                        fontSize: "1rem",
-                        padding: "1.5rem",
-                      }}
-                    >
-                      {`
-import {
-  generate_rsa_keypair_pem,
-  rsa_encrypt_base64,
-  rsa_decrypt_base64
-} from "@vaultic/crypto-engine";
-
-// Generate a key pair
-const keypair = await generate_rsa_keypair_pem();
-
-// Encrypt a message - works with any data size!
-// Vaultic auto-detects data size and uses either:
-// - Direct RSA for small data
-// - Hybrid RSA+AES for large data
-const message = "Secret message with sensitive information";
-const encrypted = await rsa_encrypt_base64(
-  keypair.public_pem, 
-  message
-);
-
-console.log(encrypted); // "eyJhbGciOiJFUzI1NiIsInR5..."
-
-// Decrypt with unified API - works for both methods
-const decrypted = await rsa_decrypt_base64(
-  keypair.private_pem, 
-  encrypted
-);
-console.log(decrypted); // "Secret message with sensitive information"
-                    `}
-                    </SyntaxHighlighter>
-                </div>
+                <CodeSnippetTabs tabs={codeTabs} defaultTab="RSA" />
               </motion.div>
             </div>
           </div>
@@ -273,10 +301,14 @@ console.log(decrypted); // "Secret message with sensitive information"
           <div className="cta-wow-bg"></div>
           <div className="container mx-auto px-6 relative z-10 text-center">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 cta-wow-title tracking-tight">
-              {t('cta.title', { ns: 'home' })}
+              {t("cta.title", { ns: "home" })}
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-              {t('cta.description', { ns: 'home' })} <span className="gradient-text font-bold">{t('app.name', { ns: 'common' })}</span> {t('cta.descriptionEnd', { ns: 'home' })}
+              {t("cta.description", { ns: "home" })}{" "}
+              <span className="gradient-text font-bold">
+                {t("app.name", { ns: "common" })}
+              </span>{" "}
+              {t("cta.descriptionEnd", { ns: "home" })}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -289,10 +321,16 @@ console.log(decrypted); // "Secret message with sensitive information"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-github mr-2"></i>
-                {t('cta.github', { ns: 'home' })}
+                {t("cta.github", { ns: "home" })}
               </Button>
-              <Button as={Link} to="/demo" variant="outline" size="lg" className="cta-wow-btn">
-                {t('cta.tryDemo', { ns: 'home' })}
+              <Button
+                as={Link}
+                to="/demo"
+                variant="outline"
+                size="lg"
+                className="cta-wow-btn"
+              >
+                {t("cta.tryDemo", { ns: "home" })}
               </Button>
             </div>
           </div>
