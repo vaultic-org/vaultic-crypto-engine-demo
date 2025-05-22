@@ -8,8 +8,6 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import { visualizer } from 'rollup-plugin-visualizer';
 import compression from 'vite-plugin-compression';
 
-const base = '';
-
 export default defineConfig({
   plugins: [
     react(),
@@ -56,7 +54,6 @@ export default defineConfig({
       }
     }
   },
-  base: base,
   server: {
     headers: {
       'Link': [
@@ -64,6 +61,12 @@ export default defineConfig({
         '</vaultic-logo.svg>; rel=preload; as=image'
       ]
     },
+    port: 5173,
+    fs: {
+      strict: false
+    }
+  },
+  preview: {
     port: 5173
   }
 });
