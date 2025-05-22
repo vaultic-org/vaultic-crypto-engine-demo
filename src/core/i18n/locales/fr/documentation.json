@@ -14,7 +14,13 @@
     "security": "Sécurité",
     "search": "Rechercher...",
     "searchAria": "Rechercher dans la documentation",
-    "noResults": "Aucun résultat trouvé"
+    "noResults": "Aucun résultat trouvé",
+    "cryptography": "CRYPTOGRAPHIE",
+    "rsa": "RSA",
+    "ecc": "ECC (ECDSA/ECDH)",
+    "hybrid": "Chiffrement Hybride",
+    "password": "Protection par mot de passe",
+    "securitySection": "SÉCURITÉ"
   },
   "codeExample": {
     "copied": "Code copié dans le presse-papier !",
@@ -86,6 +92,57 @@
       "title": "Protection des messages",
       "description": "Chiffrez des messages avec une protection par mot de passe :",
       "exampleTitle": "Exemple de protection de message"
+    },
+    "understandingKeyGeneration": {
+      "title": "Comprendre la génération de clés",
+      "intro": "La fonction `generate_rsa_keypair_pem()` crée une paire de clés RSA complète :",
+      "publicKey": "<strong>Clé publique</strong> : Partageable avec n'importe qui, utilisée pour chiffrer les messages",
+      "privateKey": "<strong>Clé privée</strong> : À garder secrète, utilisée pour déchiffrer les messages",
+      "pemFormat": "Les deux clés sont au format <strong>PEM</strong>, un standard facile à stocker et à partager"
+    },
+    "encryptionProcess": {
+      "title": "Le processus de chiffrement",
+      "intro": "Le chiffrement avec `rsa_encrypt_base64()` fonctionne de manière intelligente :",
+      "smallMessages": "Pour les petits messages : Chiffrement RSA direct",
+      "largeMessages": "Pour les grands messages : Chiffrement hybride RSA+AES automatique",
+      "base64Output": "Le résultat est toujours encodé en Base64 pour un transport facile",
+      "noManualSizing": "Vous n'avez pas besoin de gérer vous-même la taille des données"
+    },
+    "decryptionProcess": {
+      "title": "Comment fonctionne le déchiffrement",
+      "intro": "La fonction `rsa_decrypt_base64()` est conçue pour être simple :",
+      "autoDetect": "Détecte automatiquement si le message a été chiffré en mode direct ou hybride",
+      "privateKeyDecrypt": "Déchiffre avec la clé privée correspondante à la clé publique utilisée pour le chiffrement",
+      "autoBase64": "Gère automatiquement le décodage Base64",
+      "returnPlaintext": "Retourne le message original en texte brut"
+    },
+    "whyProtectKeys": {
+      "title": "Pourquoi protéger vos clés ?",
+      "content": "Les clés privées sont des secrets sensibles qui doivent être protégées. Utiliser un mot de passe pour les chiffrer ajoute une couche de sécurité supplémentaire, même si le stockage où elles se trouvent est compromis."
+    },
+    "passwordProtectionProcess": {
+      "title": "Protection par mot de passe",
+      "intro": "Le processus de protection des clés :",
+      "aesGcm": "La clé privée est chiffrée avec un algorithme AES-GCM",
+      "pbkdf2": "La clé de chiffrement est dérivée du mot de passe via PBKDF2",
+      "randomSalt": "Un sel aléatoire unique est généré pour prévenir les attaques par dictionnaire",
+      "structuredObject": "Toutes les informations nécessaires au déchiffrement sont retournées dans un objet structuré"
+    },
+    "passwordVsRsa": {
+      "title": "Protection par mot de passe vs. Chiffrement RSA",
+      "intro": "La protection par mot de passe diffère du chiffrement RSA :",
+      "passwordBased": {
+        "title": "Protection par mot de passe",
+        "samePassword": "Le même mot de passe pour chiffrer et déchiffrer",
+        "noKeyManagement": "Pas besoin de gérer des clés publiques/privées",
+        "secureSharing": "Idéal quand un mot de passe peut être partagé de façon sécurisée"
+      },
+      "rsaBased": {
+        "title": "Chiffrement RSA",
+        "publicKeyEncrypt": "Clé publique pour chiffrer, clé privée pour déchiffrer",
+        "complexButSecure": "Plus complexe mais plus sécurisé pour les communications distribuées",
+        "noPasswordSharing": "Idéal quand le partage de mot de passe n'est pas possible"
+      }
     }
   },
   "api": {
@@ -99,13 +156,19 @@
     "errorHandlingExample": "Exemple de gestion d'erreur",
     "sections": {
       "generate_rsa_keypair_pem": {
-        "description": "Générez une paire de clés RSA sécurisée (2048 bits). Renvoie un objet avec vos clés publique et privée au format PEM."
+        "description": "Génère une paire de clés RSA sécurisée (2048 bits). Retourne un objet avec vos clés publique et privée sous forme de chaînes PEM.",
+        "label": "generate_rsa_keypair_pem",
+        "returnType": "KeyPair"
       },
       "rsa_encrypt_base64": {
-        "description": "Chiffrez n'importe quelle chaîne à l'aide d'une clé publique RSA. Le résultat est une chaîne encodée en base64, prête à être partagée ou stockée."
+        "description": "Chiffre n'importe quelle chaîne en utilisant une clé publique RSA. Le résultat est une chaîne encodée en base64, prête à être partagée ou stockée.",
+        "label": "rsa_encrypt_base64",
+        "returnType": "string"
       },
       "rsa_decrypt_base64": {
-        "description": "Déchiffrez une chaîne encodée en base64 à l'aide de votre clé privée RSA. Renvoie le message original."
+        "description": "Déchiffre une chaîne encodée en base64 en utilisant votre clé privée RSA. Retourne le message original.",
+        "label": "rsa_decrypt_base64",
+        "returnType": "string"
       }
     }
   },
@@ -137,6 +200,190 @@
     "warning": {
       "title": "Note importante",
       "content": "Vaultic utilise une implémentation RSA en Rust. Bien qu'elle soit sécurisée, suivez toujours les meilleures pratiques et gardez vos clés à jour. Pour les applications hautement sensibles, envisagez des bibliothèques avec des garanties de temps constant."
+    }
+  },
+  "rsaCrypto": {
+    "title": "Cryptographie RSA",
+    "intro": "RSA est l'un des algorithmes de cryptographie asymétrique les plus utilisés. Vaultic fournit une implémentation robuste avec des protections contre les attaques par canaux latéraux. Découvrez comment générer des clés et chiffrer/déchiffrer des données avec RSA.",
+    "marvinProtection": {
+      "title": "Protection contre l'attaque Marvin",
+      "content": "Vaultic inclut des protections contre l'attaque Marvin (RUSTSEC-2023-0071), une vulnérabilité de canal latéral temporel. Ces protections comprennent des délais aléatoires, des facteurs d'aveuglement agressifs et d'autres techniques d'atténuation."
+    },
+    "keyGeneration": {
+      "title": "Génération de clés RSA",
+      "description": "Générez des paires de clés RSA pour le chiffrement et le déchiffrement asymétrique.",
+      "note": "Les clés générées sont au format PEM standard et peuvent être facilement stockées dans des fichiers ou des bases de données."
+    },
+    "encryption": {
+      "title": "Chiffrement RSA",
+      "description": "Chiffrez des messages avec la clé publique RSA. Seul le détenteur de la clé privée pourra déchiffrer.",
+      "automaticNote": "Chiffrement automatique: Vaultic choisit automatiquement entre RSA direct et chiffrement hybride RSA+AES selon la taille du message."
+    },
+    "decryption": {
+      "title": "Déchiffrement RSA",
+      "description": "Déchiffrez des messages avec votre clé privée RSA.",
+      "formatNote": "Format automatique: La fonction détecte automatiquement si le message a été chiffré avec RSA direct ou le mode hybride RSA+AES."
+    },
+    "hybrid": {
+      "title": "Chiffrement hybride",
+      "description": "Pour les messages plus grands que la capacité RSA (environ 190 octets pour RSA-2048), Vaultic utilise automatiquement un chiffrement hybride RSA+AES.",
+      "advantage": {
+        "title": "Avantage du chiffrement hybride",
+        "content": "Le chiffrement hybride combine la sécurité du chiffrement asymétrique RSA avec la performance du chiffrement symétrique AES. Cela permet de chiffrer des messages de taille illimitée tout en préservant les avantages de la cryptographie à clé publique."
+      }
+    },
+    "security": {
+      "title": "Considérations de sécurité",
+      "bestPractices": {
+        "title": "Bonnes pratiques",
+        "item1": "Utilisez des clés d'au moins 2048 bits (par défaut)",
+        "item2": "Protégez toujours vos clés privées",
+        "item3": "Utilisez le mode hybride pour les données volumineuses",
+        "item4": "Implémentez un système de rotation des clés"
+      },
+      "limitations": {
+        "title": "Limitations",
+        "item1": "Performance plus lente que les algorithmes ECC équivalents",
+        "item2": "Vulnérable aux attaques quantiques (à long terme)",
+        "item3": "Chiffrement direct limité par la taille de la clé",
+        "item4": "Pas idéal pour les appareils à ressources limitées"
+      }
+    }
+  },
+  "eccCrypto": {
+    "title": "Cryptographie à courbe elliptique (ECC)",
+    "intro": "Vaultic prend en charge les algorithmes cryptographiques à courbe elliptique (ECC) qui offrent une sécurité équivalente à RSA avec des clés beaucoup plus petites. Découvrez comment utiliser ECDSA pour les signatures numériques et ECDH pour l'échange de clés.",
+    "whyUseEcc": {
+      "title": "Pourquoi utiliser ECC ?",
+      "item1": "Clés plus petites (256 bits ECC ≈ 3072 bits RSA)",
+      "item2": "Meilleure performance, surtout sur les appareils mobiles",
+      "item3": "Parfait pour les signatures numériques et l'échange de clés",
+      "item4": "Support des courbes P-256 (secp256r1) et K-256 (secp256k1)"
+    },
+    "keyGeneration": {
+      "title": "Génération de clés ECDSA",
+      "description": "Générez des paires de clés ECC pour les signatures numériques avec les courbes P-256 ou K-256.",
+      "exampleTitle": "Génération de clés ECDSA",
+      "note": "Les clés P-256 sont largement utilisées dans les applications web, tandis que les clés K-256 sont populaires dans les applications blockchain."
+    },
+    "signing": {
+      "title": "Signatures ECDSA",
+      "description": "Signez numériquement des messages et vérifiez les signatures avec ECDSA.",
+      "exampleTitle": "Signature et vérification ECDSA",
+      "useCase": "Cas d'utilisation: Parfait pour authentifier des messages, des documents ou des transactions sans révéler la clé privée.",
+      "security": "Sécurité: Utilisez une source d'entropie sécurisée et protégez soigneusement votre clé privée."
+    },
+    "keyAgreement": {
+      "title": "Échange de clés ECDH",
+      "description": "Établissez un secret partagé entre deux parties sans jamais transmettre ce secret sur le réseau.",
+      "exampleTitle": "Accord de clé ECDH",
+      "advantageTitle": "Avantage de l'ECDH",
+      "advantageContent": "Avec ECDH, deux parties peuvent établir un secret cryptographique commun en utilisant uniquement des échanges publics. C'est la base de nombreux protocoles de chiffrement de bout en bout."
+    },
+    "encryption": {
+      "title": "Chiffrement avec ECDH",
+      "description": "Utilisez le secret partagé ECDH pour chiffrer et déchiffrer des messages avec AES-GCM.",
+      "exampleTitle": "Chiffrement/déchiffrement avec un secret partagé ECDH",
+      "howItWorks": "Comment ça marche: Le secret partagé ECDH est utilisé avec HKDF pour dériver une clé AES-256-GCM qui chiffre les données. Le paramètre contextInfo ajoute une sécurité supplémentaire en liant la clé dérivée à un contexte spécifiques."
+    }
+  },
+  "hybridEncryption": {
+    "title": "Chiffrement hybride",
+    "intro": "Le chiffrement hybride combine la cryptographie asymétrique (RSA ou ECC) avec la cryptographie symétrique (AES) pour obtenir le meilleur des deux mondes : la sécurité de la cryptographie à clé publique et la performance de la cryptographie symétrique.",
+    "whyUse": {
+      "title": "Pourquoi utiliser le chiffrement hybride ?",
+      "item1": "Chiffrement de données de taille illimitée",
+      "item2": "Performance supérieure pour les grands messages",
+      "item3": "Préservation des avantages de la cryptographie à clé publique",
+      "item4": "Utilisé automatiquement par Vaultic quand nécessaire"
+    },
+    "rsaHybrid": {
+      "title": "Chiffrement hybride RSA+AES",
+      "description": "Vaultic utilise automatiquement le chiffrement hybride RSA+AES pour les messages de plus de 190 octets.",
+      "exampleTitle": "Chiffrement hybride RSA+AES automatique",
+      "howItWorks": "Comment ça marche: Pour les messages volumineux, Vaultic génère une clé AES-256 aléatoire, chiffre le message avec AES-GCM, puis chiffre la clé AES avec RSA. Le résultat est encodé dans un format spécial contenant les deux éléments chiffrés."
+    },
+    "format": {
+      "title": "Format hybride",
+      "description": "Le format de chiffrement hybride de Vaultic est un objet JSON encodé en Base64 contenant toutes les informations nécessaires pour le déchiffrement.",
+      "exampleTitle": "Structure du format hybride",
+      "advantage": "Avantage: Ce format permet à Vaultic de détecter automatiquement le mode de chiffrement utilisé et d'appliquer l'algorithme de déchiffrement approprié sans intervention de l'utilisateur."
+    },
+    "ecdhHybrid": {
+      "title": "Chiffrement hybride ECDH+AES",
+      "description": "L'échange de clés ECDH peut être utilisé pour établir une clé partagée, qui sera ensuite utilisée avec AES pour le chiffrement de données volumineuses.",
+      "exampleTitle": "Chiffrement hybride ECDH+AES",
+      "ideal": {
+        "title": "Idéal pour le chiffrement de bout en bout",
+        "content": "Cette approche est parfaite pour les applications de messagerie chiffrée, où deux utilisateurs doivent établir un canal sécurisé pour échanger des messages potentiellement volumineux."
+      }
+    },
+    "comparison": {
+      "title": "Comparaison des approches",
+      "description": "Différentes méthodes de chiffrement hybride présentent des avantages et des inconvénients en termes de performance et de sécurité.",
+      "exampleTitle": "Comparaison des performances",
+      "rsaAes": {
+        "title": "RSA+AES",
+        "pro1": "Plus simple à mettre en œuvre",
+        "pro2": "Pas besoin d'échange préalable",
+        "con1": "Plus lent pour le chiffrement de la clé",
+        "con2": "Clés plus grandes (2048-4096 bits)"
+      },
+      "ecdhAes": {
+        "title": "ECDH+AES",
+        "pro1": "Plus rapide (clés plus petites)",
+        "pro2": "Idéal pour les communications continues",
+        "con1": "Nécessite un échange de clés publiques",
+        "con2": "Plus complexe à gérer"
+      }
+    }
+  },
+  "passwordProtection": {
+    "title": "Protection par mot de passe",
+    "intro": "Vaultic offre des fonctionnalités pour protéger vos clés cryptographiques et vos messages sensibles avec des mots de passe, en utilisant des techniques modernes de dérivation de clé et de chiffrement symétrique.",
+    "security": {
+      "title": "Sécurité des mots de passe",
+      "content": "La sécurité de vos données protégées par mot de passe dépend directement de la force de ce mot de passe. Utilisez des mots de passe longs, complexes et uniques, idéalement générés aléatoirement."
+    },
+    "keypair": {
+      "title": "Protection de paires de clés",
+      "description": "Protégez vos paires de clés RSA ou ECDSA avec un mot de passe fort pour un stockage sécurisé.",
+      "exampleTitle": "Protection et récupération de paires de clés",
+      "useCase": "Cas d'utilisation: Stockage sécurisé de clés privées, exportation de clés entre appareils, sauvegarde de clés de façon chiffrée."
+    },
+    "message": {
+      "title": "Protection de messages",
+      "description": "Chiffrez directement des messages avec un mot de passe partagé, sans nécessiter de clés publiques/privées.",
+      "exampleTitle": "Protection et récupération de messages",
+      "advantage": "Avantage: Simple à utiliser quand un mot de passe peut être partagé de façon sécurisée entre les parties, sans nécessiter d'infrastructure à clé publique."
+    },
+    "bestPractices": {
+      "title": "Bonnes pratiques pour les mots de passe",
+      "description": "Les mots de passe utilisés pour la protection cryptographique doivent être particulièrement robustes.",
+      "exampleTitle": "Mots de passe et dérivation de clé",
+      "recommendations": {
+        "title": "Recommandations",
+        "item1": "Utilisez des mots de passe d'au moins 12 caractères",
+        "item2": "Incluez des lettres majuscules, minuscules, chiffres et symboles",
+        "item3": "Évitez les séquences prévisibles et les informations personnelles",
+        "item4": "Utilisez un gestionnaire de mots de passe pour générer et stocker des mots de passe forts"
+      },
+      "avoid": {
+        "title": "À éviter",
+        "item1": "Mots de passe courts ou simples",
+        "item2": "Mots de dictionnaire ou noms communs",
+        "item3": "Dates de naissance ou informations personnelles",
+        "item4": "Réutilisation de mots de passe entre services"
+      }
+    },
+    "technical": {
+      "title": "Détails techniques",
+      "description": "En coulisses, Vaultic utilise des algorithmes modernes et éprouvés pour la dérivation de clé et le chiffrement.",
+      "exampleTitle": "Fonctionnement de la protection par mot de passe",
+      "keyDerivation": {
+        "title": "Sécurité de la dérivation de clé",
+        "content": "Vaultic utilise PBKDF2-HMAC-SHA256 avec 100 000 itérations pour transformer un mot de passe en clé cryptographique. Ce processus est intentionnellement lent pour résister aux attaques par force brute, tout en utilisant un sel unique pour chaque opération afin de prévenir les attaques par table précalculée."
+      }
     }
   }
 } 

@@ -106,5 +106,24 @@
     "edit": "Edit",
     "save": "Save",
     "copy": "Copy"
+  },
+  "siteName": "Vaultic Crypto Engine",
+  "cta": {
+    "getStarted": "Get Started",
+    "tryNow": "Try Now",
+    "viewOnGithub": "View on GitHub"
+  },
+  "copy": "Copy",
+  "copied": "Copied!",
+  "close": "Close",
+  "share": "Share",
+  "load": "Load",
+  "tip": "Note:",
+  "footer": {
+    "about": "About",
+    "docs": "Documentation",
+    "support": "Support",
+    "legal": "Legal",
+    "privacy": "Privacy"
   }
 } 

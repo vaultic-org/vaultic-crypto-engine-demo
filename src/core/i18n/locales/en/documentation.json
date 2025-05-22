@@ -14,7 +14,13 @@
     "security": "Security",
     "search": "Search...",
     "searchAria": "Search in documentation",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "cryptography": "CRYPTOGRAPHY",
+    "rsa": "RSA",
+    "ecc": "ECC (ECDSA/ECDH)",
+    "hybrid": "Hybrid Encryption",
+    "password": "Password Protection",
+    "securitySection": "SECURITY"
   },
   "codeExample": {
     "copied": "Code copied to clipboard!",
@@ -86,6 +92,57 @@
       "title": "Message Protection",
       "description": "Encrypt messages with password-based protection:",
       "exampleTitle": "Message Protection Example"
+    },
+    "understandingKeyGeneration": {
+      "title": "Understanding Key Generation",
+      "intro": "The `generate_rsa_keypair_pem()` function creates a complete RSA key pair:",
+      "publicKey": "<strong>Public key</strong>: Shareable with anyone, used to encrypt messages",
+      "privateKey": "<strong>Private key</strong>: To be kept secret, used to decrypt messages",
+      "pemFormat": "Both keys are in <strong>PEM</strong> format, a standard that is easy to store and share"
+    },
+    "encryptionProcess": {
+      "title": "The Encryption Process",
+      "intro": "Encryption with `rsa_encrypt_base64()` works intelligently:",
+      "smallMessages": "For small messages: Direct RSA encryption",
+      "largeMessages": "For large messages: Automatic RSA+AES hybrid encryption",
+      "base64Output": "The result is always Base64 encoded for easy transport",
+      "noManualSizing": "You don't need to manage data size yourself"
+    },
+    "decryptionProcess": {
+      "title": "How Decryption Works",
+      "intro": "The `rsa_decrypt_base64()` function is designed to be simple:",
+      "autoDetect": "Automatically detects if the message was encrypted in direct or hybrid mode",
+      "privateKeyDecrypt": "Decrypts with the private key corresponding to the public key used for encryption",
+      "autoBase64": "Handles Base64 decoding automatically",
+      "returnPlaintext": "Returns the original message in plain text"
+    },
+    "whyProtectKeys": {
+      "title": "Why Protect Your Keys?",
+      "content": "Private keys are sensitive secrets that must be protected. Using a password to encrypt them adds an extra layer of security, even if the storage where they reside is compromised."
+    },
+    "passwordProtectionProcess": {
+      "title": "Password Protection",
+      "intro": "The key protection process:",
+      "aesGcm": "The private key is encrypted with an AES-GCM algorithm",
+      "pbkdf2": "The encryption key is derived from the password via PBKDF2",
+      "randomSalt": "A unique random salt is generated to prevent dictionary attacks",
+      "structuredObject": "All necessary information for decryption is returned in a structured object"
+    },
+    "passwordVsRsa": {
+      "title": "Password Protection vs. RSA Encryption",
+      "intro": "Password protection differs from RSA encryption:",
+      "passwordBased": {
+        "title": "Password Protection",
+        "samePassword": "Same password to encrypt and decrypt",
+        "noKeyManagement": "No need to manage public/private keys",
+        "secureSharing": "Ideal when a password can be securely shared"
+      },
+      "rsaBased": {
+        "title": "RSA Encryption",
+        "publicKeyEncrypt": "Public key to encrypt, private key to decrypt",
+        "complexButSecure": "More complex but more secure for distributed communications",
+        "noPasswordSharing": "Ideal when password sharing is not feasible"
+      }
     }
   },
   "api": {
@@ -99,13 +156,19 @@
     "errorHandlingExample": "Error Handling Example",
     "sections": {
       "generate_rsa_keypair_pem": {
-        "description": "Generate a secure RSA key pair (2048-bit). Returns an object with your public and private keys as PEM strings."
+        "description": "Generate a secure RSA key pair (2048-bit). Returns an object with your public and private keys as PEM strings.",
+        "label": "generate_rsa_keypair_pem",
+        "returnType": "KeyPair"
       },
       "rsa_encrypt_base64": {
-        "description": "Encrypt any string using an RSA public key. The result is a base64-encoded string, ready to share or store."
+        "description": "Encrypt any string using an RSA public key. The result is a base64-encoded string, ready to share or store.",
+        "label": "rsa_encrypt_base64",
+        "returnType": "string"
       },
       "rsa_decrypt_base64": {
-        "description": "Decrypt a base64-encoded string using your RSA private key. Returns the original message."
+        "description": "Decrypt a base64-encoded string using your RSA private key. Returns the original message.",
+        "label": "rsa_decrypt_base64",
+        "returnType": "string"
       }
     }
   },
@@ -137,6 +200,190 @@
     "warning": {
       "title": "Important Note",
       "content": "Vaultic uses a Rust RSA implementation. While it's secure, always follow best practices and keep your keys up to date. For highly sensitive applications, consider libraries with constant-time guarantees."
+    }
+  },
+  "rsaCrypto": {
+    "title": "RSA Cryptography",
+    "intro": "RSA is one of the most widely used asymmetric cryptography algorithms. Vaultic provides a robust implementation with protections against side-channel attacks. Learn how to generate keys and encrypt/decrypt data with RSA.",
+    "marvinProtection": {
+      "title": "Protection against Marvin Attack",
+      "content": "Vaultic includes protections against the Marvin Attack (RUSTSEC-2023-0071), a timing side-channel vulnerability. These protections include random delays, aggressive blinding factors, and other mitigation techniques."
+    },
+    "keyGeneration": {
+      "title": "RSA Key Generation",
+      "description": "Generate RSA key pairs for asymmetric encryption and decryption.",
+      "note": "Generated keys are in standard PEM format and can be easily stored in files or databases."
+    },
+    "encryption": {
+      "title": "RSA Encryption",
+      "description": "Encrypt messages with the RSA public key. Only the holder of the private key will be able to decrypt.",
+      "automaticNote": "Automatic encryption: Vaultic automatically chooses between direct RSA and RSA+AES hybrid encryption based on message size."
+    },
+    "decryption": {
+      "title": "RSA Decryption",
+      "description": "Decrypt messages with your RSA private key.",
+      "formatNote": "Automatic format: The function automatically detects whether the message was encrypted with direct RSA or RSA+AES hybrid mode."
+    },
+    "hybrid": {
+      "title": "Hybrid Encryption",
+      "description": "For messages larger than RSA capacity (approximately 190 bytes for RSA-2048), Vaultic automatically uses RSA+AES hybrid encryption.",
+      "advantage": {
+        "title": "Advantage of Hybrid Encryption",
+        "content": "Hybrid encryption combines the security of asymmetric RSA encryption with the performance of symmetric AES encryption. This allows encrypting messages of unlimited size while preserving the advantages of public key cryptography."
+      }
+    },
+    "security": {
+      "title": "Security Considerations",
+      "bestPractices": {
+        "title": "Best Practices",
+        "item1": "Use keys of at least 2048 bits (default)",
+        "item2": "Always protect your private keys",
+        "item3": "Use hybrid mode for large data",
+        "item4": "Implement a key rotation system"
+      },
+      "limitations": {
+        "title": "Limitations",
+        "item1": "Slower performance than equivalent ECC algorithms",
+        "item2": "Vulnerable to quantum attacks (long term)",
+        "item3": "Direct encryption limited by key size",
+        "item4": "Not ideal for resource-constrained devices"
+      }
+    }
+  },
+  "eccCrypto": {
+    "title": "Elliptic Curve Cryptography (ECC)",
+    "intro": "Vaultic supports Elliptic Curve Cryptography (ECC) algorithms that offer security equivalent to RSA with much smaller keys. Learn how to use ECDSA for digital signatures and ECDH for key exchange.",
+    "whyUseEcc": {
+      "title": "Why Use ECC?",
+      "item1": "Smaller keys (256-bit ECC ≈ 3072-bit RSA)",
+      "item2": "Better performance, especially on mobile devices",
+      "item3": "Perfect for digital signatures and key exchange",
+      "item4": "Support for P-256 (secp256r1) and K-256 (secp256k1) curves"
+    },
+    "keyGeneration": {
+      "title": "ECDSA Key Generation",
+      "description": "Generate ECC key pairs for digital signatures with P-256 or K-256 curves.",
+      "exampleTitle": "ECDSA Key Generation",
+      "note": "P-256 keys are widely used in web applications, while K-256 keys are popular in blockchain applications."
+    },
+    "signing": {
+      "title": "ECDSA Signatures",
+      "description": "Digitally sign messages and verify signatures with ECDSA.",
+      "exampleTitle": "ECDSA Signing and Verification",
+      "useCase": "Use case: Perfect for authenticating messages, documents, or transactions without revealing the private key.",
+      "security": "Security: Use a secure entropy source and carefully protect your private key."
+    },
+    "keyAgreement": {
+      "title": "ECDH Key Exchange",
+      "description": "Establish a shared secret between two parties without ever transmitting that secret over the network.",
+      "exampleTitle": "ECDH Key Agreement",
+      "advantageTitle": "Advantage of ECDH",
+      "advantageContent": "With ECDH, two parties can establish a common cryptographic secret using only public exchanges. This is the foundation of many end-to-end encryption protocols."
+    },
+    "encryption": {
+      "title": "Encryption with ECDH",
+      "description": "Use the ECDH shared secret to encrypt and decrypt messages with AES-GCM.",
+      "exampleTitle": "Encryption/Decryption with ECDH Shared Secret",
+      "howItWorks": "How it works: The ECDH shared secret is used with HKDF to derive an AES-256-GCM key that encrypts the data. The contextInfo parameter adds additional security by binding the derived key to a specific context."
+    }
+  },
+  "hybridEncryption": {
+    "title": "Hybrid Encryption",
+    "intro": "Hybrid encryption combines asymmetric cryptography (RSA or ECC) with symmetric cryptography (AES) to get the best of both worlds: the security of public key cryptography and the performance of symmetric cryptography.",
+    "whyUse": {
+      "title": "Why use Hybrid Encryption?",
+      "item1": "Encryption of unlimited size data",
+      "item2": "Superior performance for large messages",
+      "item3": "Preservation of public key cryptography advantages",
+      "item4": "Automatically used by Vaultic when necessary"
+    },
+    "rsaHybrid": {
+      "title": "RSA+AES Hybrid Encryption",
+      "description": "Vaultic automatically uses RSA+AES hybrid encryption for messages larger than 190 bytes.",
+      "exampleTitle": "Automatic RSA+AES Hybrid Encryption",
+      "howItWorks": "How it works: For large messages, Vaultic generates a random AES-256 key, encrypts the message with AES-GCM, then encrypts the AES key with RSA. The result is encoded in a special format containing both encrypted elements."
+    },
+    "format": {
+      "title": "Hybrid format",
+      "description": "Vaultic's hybrid encryption format is a Base64-encoded JSON object containing all the information needed for decryption.",
+      "exampleTitle": "Hybrid Format Structure",
+      "advantage": "Advantage: This format allows Vaultic to automatically detect the encryption mode used and apply the appropriate decryption algorithm without user intervention."
+    },
+    "ecdhHybrid": {
+      "title": "ECDH+AES Hybrid encryption",
+      "description": "ECDH key exchange can be used to establish a shared key, which is then used with AES for encrypting large data.",
+      "exampleTitle": "ECDH+AES Hybrid Encryption",
+      "ideal": {
+        "title": "Ideal for End-to-End Encryption",
+        "content": "This approach is perfect for encrypted messaging applications, where two users need to establish a secure channel to exchange potentially large messages."
+      }
+    },
+    "comparison": {
+      "title": "Comparison of Approaches",
+      "description": "Different hybrid encryption methods have advantages and disadvantages in terms of performance and security.",
+      "exampleTitle": "Performance Comparison",
+      "rsaAes": {
+        "title": "RSA+AES",
+        "pro1": "Simpler to implement",
+        "pro2": "No prior exchange needed",
+        "con1": "Slower for key encryption",
+        "con2": "Larger keys (2048-4096 bits)"
+      },
+      "ecdhAes": {
+        "title": "ECDH+AES",
+        "pro1": "Faster (smaller keys)",
+        "pro2": "Ideal for continuous communications",
+        "con1": "Requires public key exchange",
+        "con2": "More complex to manage"
+      }
+    }
+  },
+  "passwordProtection": {
+    "title": "Password Protection",
+    "intro": "Vaultic offers features to protect your cryptographic keys and sensitive messages with passwords, using modern key derivation and symmetric encryption techniques.",
+    "security": {
+      "title": "Password Security",
+      "content": "The security of your password-protected data directly depends on the strength of that password. Use long, complex, and unique passwords, ideally randomly generated."
+    },
+    "keypair": {
+      "title": "Key Pair Protection",
+      "description": "Protect your RSA or ECDSA key pairs with a strong password for secure storage.",
+      "exampleTitle": "Key Pair Protection and Recovery",
+      "useCase": "Use case: Secure storage of private keys, exporting keys between devices, encrypted key backup."
+    },
+    "message": {
+      "title": "Message Protection",
+      "description": "Directly encrypt messages with a shared password, without requiring public/private keys.",
+      "exampleTitle": "Message Protection and Recovery",
+      "advantage": "Advantage: Simple to use when a password can be securely shared between parties, without requiring a public key infrastructure."
+    },
+    "bestPractices": {
+      "title": "Password best practices",
+      "description": "Passwords used for cryptographic protection must be particularly robust.",
+      "exampleTitle": "Passwords and key derivation",
+      "recommendations": {
+        "title": "Recommendations",
+        "item1": "Use passwords of at least 12 characters",
+        "item2": "Include uppercase letters, lowercase letters, numbers, and symbols",
+        "item3": "Avoid predictable sequences and personal information",
+        "item4": "Use a password manager to generate and store strong passwords"
+      },
+      "avoid": {
+        "title": "What to Avoid",
+        "item1": "Short or simple passwords",
+        "item2": "Dictionary words or common names",
+        "item3": "Birth dates or personal information",
+        "item4": "Password reuse between services"
+      }
+    },
+    "technical": {
+      "title": "Technical details",
+      "description": "Behind the scenes, Vaultic uses modern and proven algorithms for key derivation and encryption.",
+      "exampleTitle": "How password protection works",
+      "keyDerivation": {
+        "title": "Key derivation security",
+        "content": "Vaultic uses PBKDF2-HMAC-SHA256 with 100,000 iterations to transform a password into a cryptographic key. This process is intentionally slow to resist brute force attacks, while using a unique salt for each operation to prevent precomputed table attacks."
+      }
     }
   }
 } 

@@ -21,6 +21,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as SecretGameIndexImport } from './routes/secret-game/index'
 import { Route as DocumentationIndexImport } from './routes/documentation/index'
 import { Route as DemoIndexImport } from './routes/demo/index'
+import { Route as DocumentationSectionImport } from './routes/documentation/$section'
 
 // Create/Update Routes
 
@@ -83,6 +84,12 @@ const DemoIndexRoute = DemoIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DocumentationSectionRoute = DocumentationSectionImport.update({
+  id: '/documentation/$section',
+  path: '/documentation/$section',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -136,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecurityHandlerImport
       parentRoute: typeof rootRoute
     }
+    '/documentation/$section': {
+      id: '/documentation/$section'
+      path: '/documentation/$section'
+      fullPath: '/documentation/$section'
+      preLoaderRoute: typeof DocumentationSectionImport
+      parentRoute: typeof rootRoute
+    }
     '/demo/': {
       id: '/demo/'
       path: '/demo'
@@ -182,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/dot-env': typeof DotEnvRoute
   '/env': typeof EnvRoute
   '/security-handler': typeof SecurityHandlerRoute
+  '/documentation/$section': typeof DocumentationSectionRoute
   '/demo': typeof DemoIndexRoute
   '/documentation': typeof DocumentationIndexRoute
   '/secret-game/': typeof SecretGameIndexRoute
@@ -194,6 +209,7 @@ export interface FileRoutesByTo {
   '/dot-env': typeof DotEnvRoute
   '/env': typeof EnvRoute
   '/security-handler': typeof SecurityHandlerRoute
+  '/documentation/$section': typeof DocumentationSectionRoute
   '/demo': typeof DemoIndexRoute
   '/documentation': typeof DocumentationIndexRoute
   '/secret-game': typeof SecretGameIndexRoute
@@ -208,6 +224,7 @@ export interface FileRoutesById {
   '/dot-env': typeof DotEnvRoute
   '/env': typeof EnvRoute
   '/security-handler': typeof SecurityHandlerRoute
+  '/documentation/$section': typeof DocumentationSectionRoute
   '/demo/': typeof DemoIndexRoute
   '/documentation/': typeof DocumentationIndexRoute
   '/secret-game/': typeof SecretGameIndexRoute
@@ -223,6 +240,7 @@ export interface FileRouteTypes {
     | '/dot-env'
     | '/env'
     | '/security-handler'
+    | '/documentation/$section'
     | '/demo'
     | '/documentation'
     | '/secret-game/'
@@ -234,6 +252,7 @@ export interface FileRouteTypes {
     | '/dot-env'
     | '/env'
     | '/security-handler'
+    | '/documentation/$section'
     | '/demo'
     | '/documentation'
     | '/secret-game'
@@ -246,6 +265,7 @@ export interface FileRouteTypes {
     | '/dot-env'
     | '/env'
     | '/security-handler'
+    | '/documentation/$section'
     | '/demo/'
     | '/documentation/'
     | '/secret-game/'
@@ -260,6 +280,7 @@ export interface RootRouteChildren {
   DotEnvRoute: typeof DotEnvRoute
   EnvRoute: typeof EnvRoute
   SecurityHandlerRoute: typeof SecurityHandlerRoute
+  DocumentationSectionRoute: typeof DocumentationSectionRoute
   DemoIndexRoute: typeof DemoIndexRoute
   DocumentationIndexRoute: typeof DocumentationIndexRoute
 }
@@ -272,6 +293,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotEnvRoute: DotEnvRoute,
   EnvRoute: EnvRoute,
   SecurityHandlerRoute: SecurityHandlerRoute,
+  DocumentationSectionRoute: DocumentationSectionRoute,
   DemoIndexRoute: DemoIndexRoute,
   DocumentationIndexRoute: DocumentationIndexRoute,
 }
@@ -293,6 +315,7 @@ export const routeTree = rootRoute
         "/dot-env",
         "/env",
         "/security-handler",
+        "/documentation/$section",
         "/demo/",
         "/documentation/"
       ]
@@ -320,6 +343,9 @@ export const routeTree = rootRoute
     },
     "/security-handler": {
       "filePath": "security-handler.tsx"
+    },
+    "/documentation/$section": {
+      "filePath": "documentation/$section.tsx"
     },
     "/demo/": {
       "filePath": "demo/index.tsx"

@@ -2,6 +2,7 @@ import CodeExamples from '../../CodeExamples';
 import OnThisPage from '../../OnThisPage';
 import { useRef } from 'react';
 import useTranslation from '@/hooks/useTranslation';
+import InfoBlock from '../../InfoBlock';
 
 export const Usage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,19 @@ export const Usage = () => {
         <div id="key-generation" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="key-generation-heading">{t('documentation:usage.keyGeneration.title')}</h2>
           <p className="text-gray-300 mb-4 text-pretty">{t('documentation:usage.keyGeneration.description')}</p>
+          
+          <div className="mb-4 p-4 bg-blue-900/30 border border-blue-800 rounded-lg">
+            <h3 className="text-lg font-semibold text-blue-300 mb-2">{t('documentation:usage.understandingKeyGeneration.title')}</h3>
+            <p className="text-gray-300">
+              {t('documentation:usage.understandingKeyGeneration.intro')}
+            </p>
+            <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-300">
+              <li dangerouslySetInnerHTML={{ __html: t('documentation:usage.understandingKeyGeneration.publicKey') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('documentation:usage.understandingKeyGeneration.privateKey') }} />
+              <li dangerouslySetInnerHTML={{ __html: t('documentation:usage.understandingKeyGeneration.pemFormat') }} />
+            </ul>
+          </div>
+          
           <CodeExamples
             language="javascript"
             title={t('documentation:usage.keyGeneration.exampleTitle')}
@@ -33,6 +47,20 @@ console.log('Private Key:', keypair.private_pem);`}
         <div id="encryption" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="encryption-heading">{t('documentation:usage.encryption.title')}</h2>
           <p className="text-gray-300 mb-4 text-pretty">{t('documentation:usage.encryption.description')}</p>
+          
+          <div className="mb-4 p-4 bg-green-900/30 border border-green-800 rounded-lg">
+            <h3 className="text-lg font-semibold text-green-300 mb-2">{t('documentation:usage.encryptionProcess.title')}</h3>
+            <p className="text-gray-300">
+              {t('documentation:usage.encryptionProcess.intro')}
+            </p>
+            <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-300">
+              <li>{t('documentation:usage.encryptionProcess.smallMessages')}</li>
+              <li>{t('documentation:usage.encryptionProcess.largeMessages')}</li>
+              <li>{t('documentation:usage.encryptionProcess.base64Output')}</li>
+              <li>{t('documentation:usage.encryptionProcess.noManualSizing')}</li>
+            </ul>
+          </div>
+          
           <CodeExamples
             language="javascript"
             title={t('documentation:usage.encryption.exampleTitle')}
@@ -48,6 +76,20 @@ console.log('Encrypted:', encrypted);`}
         <div id="decryption" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="decryption-heading">{t('documentation:usage.decryption.title')}</h2>
           <p className="text-gray-300 mb-4 text-pretty">{t('documentation:usage.decryption.description')}</p>
+          
+          <div className="mb-4 p-4 bg-purple-900/30 border border-purple-800 rounded-lg">
+            <h3 className="text-lg font-semibold text-purple-300 mb-2">{t('documentation:usage.decryptionProcess.title')}</h3>
+            <p className="text-gray-300">
+              {t('documentation:usage.decryptionProcess.intro')}
+            </p>
+            <ul className="list-disc pl-5 mt-2 space-y-1 text-gray-300">
+              <li>{t('documentation:usage.decryptionProcess.autoDetect')}</li>
+              <li>{t('documentation:usage.decryptionProcess.privateKeyDecrypt')}</li>
+              <li>{t('documentation:usage.decryptionProcess.autoBase64')}</li>
+              <li>{t('documentation:usage.decryptionProcess.returnPlaintext')}</li>
+            </ul>
+          </div>
+          
           <CodeExamples
             language="javascript"
             title={t('documentation:usage.decryption.exampleTitle')}
@@ -62,6 +104,24 @@ console.log('Decrypted:', decrypted);`}
         <div id="key-protection" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="key-protection-heading">{t('documentation:usage.keyProtection.title')}</h2>
           <p className="text-gray-300 mb-4 text-pretty">{t('documentation:usage.keyProtection.description')}</p>
+          
+          <InfoBlock color="yellow" title={t('documentation:usage.whyProtectKeys.title')}>
+            <p dangerouslySetInnerHTML={{ __html: t('documentation:usage.whyProtectKeys.content') }} />
+          </InfoBlock>
+          
+          <div className="mb-4 p-4 bg-yellow-900/30 border border-yellow-800 rounded-lg mt-4">
+            <h3 className="text-lg font-semibold text-yellow-300 mb-2">{t('documentation:usage.passwordProtectionProcess.title')}</h3>
+            <p className="text-gray-300">
+              {t('documentation:usage.passwordProtectionProcess.intro')}
+            </p>
+            <ol className="list-decimal pl-5 mt-2 space-y-1 text-gray-300">
+              <li>{t('documentation:usage.passwordProtectionProcess.aesGcm')}</li>
+              <li>{t('documentation:usage.passwordProtectionProcess.pbkdf2')}</li>
+              <li>{t('documentation:usage.passwordProtectionProcess.randomSalt')}</li>
+              <li>{t('documentation:usage.passwordProtectionProcess.structuredObject')}</li>
+            </ol>
+          </div>
+          
           <CodeExamples
             language="javascript"
             title={t('documentation:usage.keyProtection.exampleTitle')}
@@ -88,6 +148,32 @@ const recoveredKeypair = await unprotect_keypair(protectedKeypair, passphrase);`
         <div id="message-protection" className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-2 text-pretty" id="message-protection-heading">{t('documentation:usage.messageProtection.title')}</h2>
           <p className="text-gray-300 mb-4 text-pretty">{t('documentation:usage.messageProtection.description')}</p>
+          
+          <div className="mb-4 p-4 bg-indigo-900/30 border border-indigo-800 rounded-lg">
+            <h3 className="text-lg font-semibold text-indigo-300 mb-2">{t('documentation:usage.passwordVsRsa.title')}</h3>
+            <p className="text-gray-300">
+              {t('documentation:usage.passwordVsRsa.intro')}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              <div>
+                <h4 className="font-semibold text-indigo-200">{t('documentation:usage.passwordVsRsa.passwordBased.title')}</h4>
+                <ul className="list-disc pl-5 space-y-1 text-gray-300">
+                  <li>{t('documentation:usage.passwordVsRsa.passwordBased.samePassword')}</li>
+                  <li>{t('documentation:usage.passwordVsRsa.passwordBased.noKeyManagement')}</li>
+                  <li>{t('documentation:usage.passwordVsRsa.passwordBased.secureSharing')}</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-indigo-200">{t('documentation:usage.passwordVsRsa.rsaBased.title')}</h4>
+                <ul className="list-disc pl-5 space-y-1 text-gray-300">
+                  <li>{t('documentation:usage.passwordVsRsa.rsaBased.publicKeyEncrypt')}</li>
+                  <li>{t('documentation:usage.passwordVsRsa.rsaBased.complexButSecure')}</li>
+                  <li>{t('documentation:usage.passwordVsRsa.rsaBased.noPasswordSharing')}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
           <CodeExamples
             language="javascript"
             title={t('documentation:usage.messageProtection.exampleTitle')}

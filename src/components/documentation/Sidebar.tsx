@@ -1,16 +1,19 @@
 import { useState, useMemo, useRef } from 'react';
-import { Search, Book, Compass } from 'lucide-react';
+import { Search, Book, Compass, Shield, KeyRound } from 'lucide-react';
 import useTranslation from '@/hooks/useTranslation';
 
-const DOC_VERSION = '^0.1.5'; // Version read from package.json
+const DOC_VERSION = '^0.1.6';
 
-// Content for search functionality with proper TypeScript indexing
 const contentData: Record<string, string> = {
   'getting-started': 'crypto engine secure encryption decryption RSA cryptography WebAssembly WASM introduction basics beginning',
   'installation': 'install setup configure Rust JavaScript WebAssembly npm cargo package.json cargo.toml dependencies build compile',
   'usage': 'examples code samples key generation encryption decryption implementation workflow data security',
   'api': 'functions methods generate_rsa_keypair_pem rsa_encrypt_base64 rsa_decrypt_base64 parameters returns types errors',
-  'security': 'best practices security guidelines recommendations secure usage encryption standards compliance OWASP'
+  'security': 'best practices security guidelines recommendations secure usage encryption standards compliance OWASP',
+  'rsa-crypto': 'RSA cryptography asymmetric encryption decryption public key private key generation PKCS padding',
+  'ecc-crypto': 'ECC elliptic curve cryptography ECDSA signatures ECDH key agreement P-256 K-256 secp256r1 secp256k1',
+  'hybrid-encryption': 'hybrid encryption RSA+AES ECDH+AES performance large data encryption symmetric asymmetric',
+  'password-protection': 'password protection keypair message PBKDF2 AES-GCM key derivation salt nonce security',
 };
 
 export default function Sidebar({ activeId, onNavigate }: { activeId: string, onNavigate: (id: string) => void }) {
@@ -33,6 +36,22 @@ export default function Sidebar({ activeId, onNavigate }: { activeId: string, on
       links: [
         { label: t('documentation:sidebar.usage'), id: 'usage', badge: 'TS' },
         { label: t('documentation:sidebar.api'), id: 'api', badge: 'TS' },
+      ],
+    },
+    {
+      title: t('documentation:sidebar.cryptography'),
+      icon: <KeyRound className="w-4 h-4 mr-1 text-gray-400" />,
+      links: [
+        { label: t('documentation:sidebar.rsa'), id: 'rsa-crypto', badge: 'TS' },
+        { label: t('documentation:sidebar.ecc'), id: 'ecc-crypto', badge: 'TS' },
+        { label: t('documentation:sidebar.hybrid'), id: 'hybrid-encryption', badge: 'TS' },
+        { label: t('documentation:sidebar.password'), id: 'password-protection', badge: 'TS' },
+      ],
+    },
+    {
+      title: t('documentation:sidebar.securitySection'),
+      icon: <Shield className="w-4 h-4 mr-1 text-gray-400" />,
+      links: [
         { label: t('documentation:sidebar.security'), id: 'security', badge: 'TS' },
       ],
     },
@@ -65,6 +84,8 @@ export default function Sidebar({ activeId, onNavigate }: { activeId: string, on
   // Handle navigation to a section
   const handleLinkClick = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
+    console.log('Sidebar: link clicked for section:', id);
+    console.log('Sidebar: active section before navigation:', activeId);
     onNavigate(id);
   };
 
@@ -103,7 +124,7 @@ export default function Sidebar({ activeId, onNavigate }: { activeId: string, on
                 <li key={link.id}>
                   <a
                     ref={idx === 0 ? firstResultRef : undefined}
-                    href={`/documentation?section=${link.id}`}
+                    href={`/documentation/${link.id}`}
                     onClick={(e) => handleLinkClick(link.id, e)}
                     className={`w-full flex items-center justify-between px-5 py-2 rounded-lg text-left transition-colors font-medium text-sm focus:outline-none focus:ring-2 focus:ring-blue-500
                       ${activeId === link.id ? 'bg-white/10 text-white outline outline-2 outline-blue-500 outline-offset-[-2px]' : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}

@@ -6,9 +6,7 @@ import useTranslation from '@/hooks/useTranslation';
 const apiSections = [
   {
     id: 'generate_rsa_keypair_pem',
-    label: 'generate_rsa_keypair_pem',
     signature: 'generate_rsa_keypair_pem(): KeyPair',
-    returnType: 'KeyPair',
     example: `const keypair = generate_rsa_keypair_pem();
 console.log("Public Key:", keypair.public_pem);
 console.log("Private Key:", keypair.private_pem);`,
@@ -19,17 +17,13 @@ console.log("Private Key:", keypair.private_pem);`,
   },
   {
     id: 'rsa_encrypt_base64',
-    label: 'rsa_encrypt_base64',
     signature: 'rsa_encrypt_base64(public_key: string, data: string): string',
-    returnType: 'string',
     example: `const encrypted = rsa_encrypt_base64(keypair.public_pem, "Secret message");
 console.log("Encrypted:", encrypted);`,
   },
   {
     id: 'rsa_decrypt_base64',
-    label: 'rsa_decrypt_base64',
     signature: 'rsa_decrypt_base64(private_key: string, encrypted_data: string): string',
-    returnType: 'string',
     example: `const decrypted = rsa_decrypt_base64(keypair.private_pem, encrypted);
 console.log("Decrypted:", decrypted);`,
   },
@@ -50,8 +44,8 @@ export const API = () => {
           {apiSections.map((section) => (
             <div key={section.id} id={section.id} className="w-full">
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold text-white tracking-tight text-pretty">{section.label}</h2>
-                <span className="inline-block bg-blue-900/60 text-blue-300 text-xs font-semibold px-2 py-1 rounded-md border border-blue-700">{section.returnType}</span>
+                <h2 className="text-2xl font-bold text-white tracking-tight text-pretty">{t(`documentation:api.sections.${section.id}.label`)}</h2>
+                <span className="inline-block bg-blue-900/60 text-blue-300 text-xs font-semibold px-2 py-1 rounded-md border border-blue-700">{t(`documentation:api.sections.${section.id}.returnType`)}</span>
               </div>
               <div className="font-mono text-base bg-gray-800/80 rounded-lg px-4 py-3 mb-2 border border-gray-700 shadow-sm overflow-x-auto w-full" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <code className="whitespace-pre">{section.signature}</code>

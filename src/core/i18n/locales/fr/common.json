@@ -49,7 +49,10 @@
     "githubRepo": "GitHub",
     "npmPackage": "NPM",
     "releaseNotes": "Nouveautés",
-    "slogan": "Rapide par design, sécurisé par nature."
+    "slogan": "Rapide par design, sécurisé par nature.",
+    "about": "À propos",
+    "docs": "Documentation",
+    "support": "Support"
   },
   "documentation": {
     "gettingStarted": "Démarrage",
@@ -62,5 +65,14 @@
     "usageExamples": {
       "title": "Exemples"
     }
-  }
+  },
+  "siteName": "Vaultic Crypto Engine",
+  "cta": {
+    "getStarted": "Commencer",
+    "tryNow": "Essayer maintenant",
+    "viewOnGithub": "Voir sur GitHub"
+  },
+  "share": "Partager",
+  "load": "Charger",
+  "tip": "Note:"
 } 
