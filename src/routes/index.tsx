@@ -118,7 +118,7 @@ console.log("Shared secrets are identical:", sharedSecretAlice === sharedSecretB
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
-                className="text-5xl md:text-7xl font-extrabold mb-6 gradient-text tracking-tight leading-none"
+                className="text-5xl md:text-7xl font-extrabold mb-6 gradient-text tracking-tight leading-none text-center"
               >
                 {t("app.name", { ns: "common" })}
               </motion.h1>
@@ -297,7 +297,7 @@ console.log("Shared secrets are identical:", sharedSecretAlice === sharedSecretB
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 relative overflow-hidden cta-section-bg">
+        <section className="py-32 md:py-40 relative overflow-hidden cta-section-bg">
           <div className="cta-wow-bg"></div>
           <div className="container mx-auto px-6 relative z-10 text-center">
             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 cta-wow-title tracking-tight">

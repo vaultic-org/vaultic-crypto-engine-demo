@@ -42,15 +42,6 @@ const Footer: FC = () => {
               >
                 <i className="fab fa-twitter text-xl"></i>
               </a>
-              <a
-                href="https://discord.gg/aeBjmbtt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors"
-                aria-label="Discord"
-              >
-                <i className="fab fa-discord text-xl"></i>
-              </a>
             </div>
           </div>
 
